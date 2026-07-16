@@ -1,25 +1,40 @@
 // ============================================================
-// 0. USER PROFILE MANAGEMENT
+// 0. USER PROFILE MANAGEMENT (CURRENCY FIXED)
 // ============================================================
 let userProfile = { name: 'Guest', currency: 'USD', symbol: '$' };
+
+// ✅ Currency Symbol Map (PKR added and verified)
+const CURRENCY_SYMBOLS = {
+    PKR: 'Rs',
+    USD: '$',
+    EUR: '€',
+    GBP: '£',
+    INR: '₹',
+    JPY: '¥'
+};
 
 function loadUserProfile() {
     const stored = localStorage.getItem('userProfile');
     if (stored) {
         userProfile = JSON.parse(stored);
+        // Ensure symbol is correctly set even if old data is missing it
+        if (!userProfile.symbol || !CURRENCY_SYMBOLS[userProfile.currency]) {
+            userProfile.symbol = CURRENCY_SYMBOLS[userProfile.currency] || '$';
+        }
+        console.log('✅ Profile loaded:', userProfile);
         return true;
     }
     return false;
 }
 
 function saveUserProfile(name, currency, initialBalance = 0) {
-    const symbolMap = { USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥' };
     userProfile = {
         name: name,
         currency: currency,
-        symbol: symbolMap[currency] || '$'
+        symbol: CURRENCY_SYMBOLS[currency] || '$'
     };
     localStorage.setItem('userProfile', JSON.stringify(userProfile));
+    console.log('✅ Profile saved:', userProfile);
     
     if (initialBalance > 0) {
         const month = new Date().toISOString().slice(0, 7);
@@ -47,6 +62,7 @@ function updateUIWithUser() {
     const initials = userProfile.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
     document.getElementById('userAvatar').textContent = initials;
     document.getElementById('headerCurrencyDisplay').textContent = userProfile.currency;
+    console.log('🔄 UI updated with currency:', userProfile.currency, 'symbol:', userProfile.symbol);
 }
 
 function showLoginPage(show) {
@@ -69,7 +85,7 @@ function logoutUser() {
 }
 
 // ============================================================
-// 1. SIDEBAR LOGIC (FIXED: overlay only on mobile, NO BLUR)
+// 1. SIDEBAR LOGIC
 // ============================================================
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('sidebarOverlay');
@@ -80,7 +96,6 @@ function toggleSidebar(forceState) {
     const isOpen = forceState !== undefined ? forceState : !sidebar.classList.contains('open');
     sidebar.classList.toggle('open', isOpen);
 
-    // Only show overlay on mobile (under 900px)
     if (window.innerWidth < 901) {
         overlay.classList.toggle('active', isOpen);
     } else {
@@ -151,10 +166,10 @@ saveSettingsBtn.addEventListener('click', () => {
     const name = settingsName.value.trim();
     const currency = settingsCurrency.value;
     if (!name) return showToast('Please enter a name.', 'error');
-    const symbolMap = { USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥' };
+    
     userProfile.name = name;
     userProfile.currency = currency;
-    userProfile.symbol = symbolMap[currency] || '$';
+    userProfile.symbol = CURRENCY_SYMBOLS[currency] || '$';
     localStorage.setItem('userProfile', JSON.stringify(userProfile));
     updateUIWithUser();
     renderAll();
@@ -243,7 +258,7 @@ function initApp() {
 
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark');
-        darkToggle.textContent = '☀️ Light';
+        darkToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
     }
 }
 
@@ -311,6 +326,7 @@ function updateMonthLabel(monthVal) {
     listMonthLabel.textContent = `Showing ${label}`;
 }
 
+// ✅ UPDATED: Uses userProfile.symbol correctly
 function formatCurrency(amount) {
     const symbol = userProfile.symbol || '$';
     return symbol + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -341,7 +357,7 @@ function renderAll() {
     balanceDisplay.textContent = formatCurrency(balance);
     savingsDisplay.textContent = savingsRate.toFixed(0) + '%';
 
-    txCountBadge.textContent = `📋 ${filtered.length} Transactions`;
+    txCountBadge.innerHTML = `<i class="fas fa-list"></i> ${filtered.length} Transactions`;
     const expenses = filtered.filter(tx => tx.type === 'expense');
     const catMap = {};
     expenses.forEach(tx => { catMap[tx.category] = (catMap[tx.category] || 0) + tx.amount; });
@@ -350,7 +366,7 @@ function renderAll() {
     for (const [cat, val] of Object.entries(catMap)) {
         if (val > topVal) { topVal = val; topCat = cat; }
     }
-    topCategoryBadge.textContent = topCat !== 'None' ? `🏷️ Top: ${topCat}` : '🏷️ Top: None';
+    topCategoryBadge.innerHTML = topCat !== 'None' ? `<i class="fas fa-tag"></i> Top: ${topCat}` : '<i class="fas fa-tag"></i> Top: None';
 
     renderChart(filtered);
     renderTransactionList(filtered);
@@ -440,8 +456,8 @@ function renderTransactionList(filtered) {
                 </div>
                 <span class="tx-amount ${colorClass}">${sign} ${formatCurrency(tx.amount)}</span>
                 <div class="tx-actions">
-                    <button class="edit-btn" onclick="editTransaction(${tx.id})">✏️</button>
-                    <button class="delete-btn" onclick="deleteTransaction(${tx.id})">🗑️</button>
+                    <button class="edit-btn" onclick="editTransaction(${tx.id})"><i class="fas fa-pen"></i></button>
+                    <button class="delete-btn" onclick="deleteTransaction(${tx.id})"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
         `;
@@ -480,8 +496,8 @@ function handleFormSubmit(e) {
             showToast('✅ Transaction updated!', 'success');
         }
         editingId = null;
-        submitBtn.textContent = '➕ Add Transaction';
-        formTitle.textContent = '➕ Add Transaction';
+        submitBtn.innerHTML = '<i class="fas fa-plus"></i> Add Transaction';
+        formTitle.innerHTML = '<i class="fas fa-plus-circle"></i> Add Transaction';
     } else {
         const newTx = { id: Date.now(), description, amount, category, type, date: month + '-01' };
         transactions.push(newTx);
@@ -512,8 +528,8 @@ function editTransaction(id) {
     typeRadios.forEach(r => { r.checked = (r.value === tx.type); });
 
     editingId = tx.id;
-    submitBtn.textContent = '✏️ Update Transaction';
-    formTitle.textContent = '✏️ Edit Transaction';
+    submitBtn.innerHTML = '<i class="fas fa-pen"></i> Update Transaction';
+    formTitle.innerHTML = '<i class="fas fa-pen"></i> Edit Transaction';
     document.querySelector('.form-box').scrollIntoView({ behavior: 'smooth' });
     descInput.focus();
 }
@@ -524,7 +540,7 @@ function editTransaction(id) {
 function toggleDarkMode() {
     document.body.classList.toggle('dark');
     const isDark = document.body.classList.contains('dark');
-    darkToggle.textContent = isDark ? '☀️ Light' : '🌙 Dark';
+    darkToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light' : '<i class="fas fa-moon"></i> Dark';
     localStorage.setItem('darkMode', isDark);
     renderAll();
 }
