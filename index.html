@@ -10,9 +10,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
 
+    <!-- Font Awesome 6 (Free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
+    <!-- ⬇️ UPDATED: Now using index.css -->
     <link rel="stylesheet" href="index.css" />
 </head>
 <body>
@@ -25,7 +29,9 @@
     <!-- ========================================================== -->
     <div id="loginPage" class="login-page">
         <div class="login-card">
-            <div class="login-logo">📊 Finora</div>
+            <div class="login-logo">
+                <i class="fas fa-chart-pie"></i> Finora
+            </div>
             <p class="login-sub">Welcome! Set up your profile to start tracking.</p>
             
             <div class="login-form">
@@ -36,6 +42,7 @@
                 <div class="form-group">
                     <label for="loginCurrency">Preferred Currency</label>
                     <select id="loginCurrency">
+                        <option value="PKR">🇵🇰 PKR (Rs)</option>
                         <option value="USD">🇺🇸 USD ($)</option>
                         <option value="EUR">🇪🇺 EUR (€)</option>
                         <option value="GBP">🇬🇧 GBP (£)</option>
@@ -48,7 +55,9 @@
                     <input type="number" id="loginBalance" placeholder="e.g., 5000" step="0.01" min="0" value="5000" />
                     <small style="color: var(--text-secondary); display: block; margin-top: 4px;">This will be added as your initial income.</small>
                 </div>
-                <button class="btn btn-primary" id="loginBtn" style="margin-top: 10px;">🚀 Start Tracking</button>
+                <button class="btn btn-primary" id="loginBtn" style="margin-top: 10px;">
+                    <i class="fas fa-rocket"></i> Start Tracking
+                </button>
             </div>
         </div>
     </div>
@@ -58,7 +67,7 @@
     <!-- ========================================================== -->
     <div id="settingsModal" class="modal-overlay">
         <div class="modal-content">
-            <h2>⚙️ Settings</h2>
+            <h2><i class="fas fa-cog"></i> Settings</h2>
             <div class="form-group">
                 <label for="settingsName">Name</label>
                 <input type="text" id="settingsName" placeholder="Your Name" />
@@ -66,6 +75,7 @@
             <div class="form-group">
                 <label for="settingsCurrency">Currency</label>
                 <select id="settingsCurrency">
+                    <option value="PKR">🇵🇰 PKR (Rs)</option>
                     <option value="USD">🇺🇸 USD ($)</option>
                     <option value="EUR">🇪🇺 EUR (€)</option>
                     <option value="GBP">🇬🇧 GBP (£)</option>
@@ -74,9 +84,15 @@
                 </select>
             </div>
             <div style="display: flex; gap: 12px; margin-top: 15px; flex-wrap: wrap;">
-                <button class="btn btn-primary" id="saveSettingsBtn" style="flex: 1;">💾 Save Changes</button>
-                <button class="btn" id="logoutBtn" style="flex: 1; background: #ef4444; color: white;">🚪 Logout</button>
-                <button class="btn" id="closeSettingsBtn" style="flex: 0.5; background: var(--border-color); color: var(--text-primary);">Cancel</button>
+                <button class="btn btn-primary" id="saveSettingsBtn" style="flex: 1;">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button class="btn" id="logoutBtn" style="flex: 1; background: #ef4444; color: white;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+                <button class="btn" id="closeSettingsBtn" style="flex: 0.5; background: var(--border-color); color: var(--text-primary);">
+                    Cancel
+                </button>
             </div>
         </div>
     </div>
@@ -89,14 +105,14 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="logo">
-                <span class="logo-icon">📊</span>
+                <span class="logo-icon"><i class="fas fa-chart-pie"></i></span>
                 <span>Finora</span>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="nav-item active">🏠 Dashboard</a>
-                <a href="#" class="nav-item">📈 Reports</a>
-                <a href="#" class="nav-item">💰 Budgets</a>
-                <a href="#" class="nav-item" id="settingsNavTrigger">⚙️ Settings</a>
+                <a href="#" class="nav-item active"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="#" class="nav-item"><i class="fas fa-chart-line"></i> Reports</a>
+                <a href="#" class="nav-item"><i class="fas fa-wallet"></i> Budgets</a>
+                <a href="#" class="nav-item" id="settingsNavTrigger"><i class="fas fa-cog"></i> Settings</a>
             </nav>
             <div class="sidebar-user">
                 <div class="avatar" id="userAvatar">JD</div>
@@ -113,7 +129,9 @@
 
             <header class="top-header">
                 <div style="display: flex; align-items: center; gap: 15px;">
-                    <button class="hamburger" id="menuToggle" aria-label="Toggle menu">☰</button>
+                    <button class="hamburger" id="menuToggle" aria-label="Toggle menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
                     <div>
                         <h1>Dashboard</h1>
                         <p id="currentMonthDisplay" class="subtitle">July 2026 Overview</p>
@@ -121,30 +139,34 @@
                 </div>
                 <div class="header-actions">
                     <span id="headerCurrencyDisplay" style="font-weight:600; color:var(--text-secondary);">USD</span>
-                    <button class="dark-toggle" id="darkModeToggle">🌙 Dark</button>
-                    <button class="btn btn-primary" id="addQuickBtn" style="width:auto; padding: 0 20px;">+ New</button>
+                    <button class="dark-toggle" id="darkModeToggle">
+                        <i class="fas fa-moon"></i> Dark
+                    </button>
+                    <button class="btn btn-primary" id="addQuickBtn" style="width:auto; padding: 0 20px;">
+                        <i class="fas fa-plus"></i> New
+                    </button>
                 </div>
             </header>
 
             <!-- Summary Cards -->
             <section class="summary-grid">
                 <div class="card card-balance">
-                    <div class="card-header"><span>💰 Total Balance</span></div>
+                    <div class="card-header"><i class="fas fa-wallet"></i> Total Balance</div>
                     <div class="card-value" id="balanceDisplay">$0.00</div>
                     <div class="card-footer" id="balanceChange">+ $0.00 this month</div>
                 </div>
                 <div class="card card-income">
-                    <div class="card-header"><span>⬆ Income</span></div>
+                    <div class="card-header"><i class="fas fa-arrow-up"></i> Income</div>
                     <div class="card-value" id="incomeDisplay">$0.00</div>
                     <div class="card-footer">Total earned</div>
                 </div>
                 <div class="card card-expense">
-                    <div class="card-header"><span>⬇ Expenses</span></div>
+                    <div class="card-header"><i class="fas fa-arrow-down"></i> Expenses</div>
                     <div class="card-value" id="expenseDisplay">$0.00</div>
                     <div class="card-footer">Total spent</div>
                 </div>
                 <div class="card card-savings">
-                    <div class="card-header"><span>🏦 Savings Rate</span></div>
+                    <div class="card-header"><i class="fas fa-piggy-bank"></i> Savings Rate</div>
                     <div class="card-value" id="savingsDisplay">0%</div>
                     <div class="card-footer">of total income</div>
                 </div>
@@ -153,30 +175,30 @@
             <!-- Filter -->
             <div class="filter-bar">
                 <div class="filter-left">
-                    <label for="monthFilter">📅 Month:</label>
+                    <label for="monthFilter"><i class="fas fa-calendar-alt"></i> Month:</label>
                     <input type="month" id="monthFilter" />
                 </div>
                 <div class="filter-right">
-                    <span class="stat-badge" id="txCountBadge">📋 0 Transactions</span>
-                    <span class="stat-badge" id="topCategoryBadge">🏷️ Top: None</span>
+                    <span class="stat-badge" id="txCountBadge"><i class="fas fa-list"></i> 0 Transactions</span>
+                    <span class="stat-badge" id="topCategoryBadge"><i class="fas fa-tag"></i> Top: None</span>
                 </div>
             </div>
 
             <!-- Row -->
             <div class="row">
                 <div class="form-box">
-                    <h2 id="formTitle">➕ Add Transaction</h2>
+                    <h2 id="formTitle"><i class="fas fa-plus-circle"></i> Add Transaction</h2>
                     <form id="transactionForm">
                         <div class="form-group">
-                            <label for="description">Description</label>
+                            <label for="description"><i class="fas fa-pen"></i> Description</label>
                             <input type="text" id="description" placeholder="e.g., Uber ride to airport" required />
                         </div>
                         <div class="form-group">
-                            <label for="amount">Amount</label>
+                            <label for="amount"><i class="fas fa-dollar-sign"></i> Amount</label>
                             <input type="number" id="amount" placeholder="0.00" step="0.01" min="0.01" required />
                         </div>
                         <div class="form-group">
-                            <label for="category">Category</label>
+                            <label for="category"><i class="fas fa-tags"></i> Category</label>
                             <select id="category">
                                 <option value="Food & Dining">🍔 Food & Dining</option>
                                 <option value="Transport">🚗 Transport</option>
@@ -191,16 +213,18 @@
                         <div class="form-group">
                             <label>Type</label>
                             <div class="radio-group">
-                                <label><input type="radio" name="type" value="income" checked /> 💰 Income (Add Money)</label>
-                                <label><input type="radio" name="type" value="expense" /> 💳 Expense</label>
+                                <label><input type="radio" name="type" value="income" checked /> <i class="fas fa-arrow-up" style="color: var(--accent-green);"></i> Income</label>
+                                <label><input type="radio" name="type" value="expense" /> <i class="fas fa-arrow-down" style="color: var(--accent-red);"></i> Expense</label>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" id="submitBtn">➕ Add Transaction</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <i class="fas fa-plus"></i> Add Transaction
+                        </button>
                     </form>
                 </div>
 
                 <div class="chart-box">
-                    <h2>📊 Spending Breakdown</h2>
+                    <h2><i class="fas fa-chart-pie"></i> Spending Breakdown</h2>
                     <div class="chart-wrapper">
                         <canvas id="expenseChart"></canvas>
                     </div>
@@ -211,7 +235,7 @@
             <!-- List -->
             <div class="list-box">
                 <div class="list-header">
-                    <h2>📋 Recent Transactions</h2>
+                    <h2><i class="fas fa-receipt"></i> Recent Transactions</h2>
                     <span id="listMonthLabel">Showing July 2026</span>
                 </div>
                 <div id="transactionList">
@@ -222,6 +246,7 @@
         </main>
     </div>
 
+    <!-- ⬇️ UPDATED: Now using index.js -->
     <script src="index.js"></script>
 </body>
 </html>
