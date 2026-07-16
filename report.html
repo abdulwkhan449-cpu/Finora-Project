@@ -19,8 +19,10 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-    <!-- Base CSS (Sidebar & Themes) + Reports CSS -->
+    <!-- Base CSS (Sidebar & Themes) – this handles ALL sidebar behavior -->
     <link rel="stylesheet" href="index.css" />
+
+    <!-- Reports-specific styles (only for charts, lists, etc.) -->
     <link rel="stylesheet" href="reports.css" />
 </head>
 <body>
@@ -33,7 +35,7 @@
     <!-- ========================================================== -->
     <div class="app-container">
 
-        <!-- Sidebar -->
+        <!-- Sidebar (IDENTICAL to index.html) -->
         <aside class="sidebar" id="sidebar">
             <div class="logo">
                 <span class="logo-icon"><i class="fas fa-chart-pie"></i></span>
@@ -41,8 +43,8 @@
             </div>
             <nav class="sidebar-nav">
                 <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="./report.html" class="nav-item active"><i class="fas fa-chart-line"></i> Reports</a>
-                <a href="./budget.html" class="nav-item"><i class="fas fa-wallet"></i> Budgets</a>
+                <a href="#" class="nav-item active"><i class="fas fa-chart-line"></i> Reports</a>
+                <a href="#" class="nav-item"><i class="fas fa-wallet"></i> Budgets</a>
                 <a href="#" class="nav-item" id="settingsNavTrigger"><i class="fas fa-cog"></i> Settings</a>
             </nav>
             <div class="sidebar-user">
@@ -52,12 +54,13 @@
             </div>
         </aside>
 
-        <!-- Overlay (visible only on mobile) -->
+        <!-- Overlay (identical to index.html) -->
         <div class="overlay" id="sidebarOverlay"></div>
 
-        <!-- Main Content -->
+        <!-- Main Content (IDENTICAL layout to index.html) -->
         <main class="main-content" id="mainContent">
 
+            <!-- Header (identical to index.html) -->
             <header class="top-header">
                 <div class="flex items-center gap-4">
                     <button class="hamburger" id="menuToggle"><i class="fas fa-bars"></i></button>
@@ -72,7 +75,7 @@
                 </div>
             </header>
 
-            <!-- Year Filter -->
+            <!-- Filter Bar -->
             <div class="filter-bar">
                 <div class="filter-left">
                     <label for="yearFilter"><i class="fas fa-calendar-alt"></i> Year:</label>
@@ -85,7 +88,7 @@
                 </div>
             </div>
 
-            <!-- Summary Cards -->
+            <!-- Summary Cards (identical grid to index.html) -->
             <section class="summary-grid">
                 <div class="card card-income">
                     <div class="card-header"><i class="fas fa-arrow-up"></i> Total Income</div>
@@ -104,7 +107,7 @@
                 </div>
             </section>
 
-            <!-- Charts Row -->
+            <!-- Charts Row (identical grid to index.html) -->
             <div class="row">
                 <div class="chart-box" style="grid-column: 1 / -1;">
                     <h2 class="text-xl font-semibold mb-2"><i class="fas fa-chart-bar text-purple-600"></i> Monthly Income vs Expenses</h2>
@@ -114,7 +117,7 @@
                 </div>
             </div>
 
-            <!-- Bottom Row: Category Chart + Top Spending -->
+            <!-- Bottom Row -->
             <div class="row">
                 <div class="chart-box">
                     <h2 class="text-xl font-semibold mb-2"><i class="fas fa-chart-pie text-purple-600"></i> Expense Breakdown</h2>
@@ -136,7 +139,7 @@
     </div>
 
     <!-- ========================================================== -->
-    <!-- SETTINGS MODAL (Copied from index.html for consistency)    -->
+    <!-- SETTINGS MODAL (identical to index.html)                   -->
     <!-- ========================================================== -->
     <div id="settingsModal" class="modal-overlay">
         <div class="modal-content">
