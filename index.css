@@ -287,15 +287,16 @@ body {
     margin-top: 4px;
 }
 
+/* ========== OVERLAY (Mobile only, NO BLUR) ========== */
 .overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.3);
     z-index: 999;
     display: none;
     opacity: 0;
     transition: opacity 0.3s ease;
-    backdrop-filter: blur(2px);
+    /* NO backdrop-filter: blur() here - keeps content crisp */
 }
 .overlay.active {
     display: block;
