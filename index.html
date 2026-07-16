@@ -10,16 +10,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
 
-    <!-- Font Awesome 6 (Free) -->
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    <!-- Tailwind CSS (Play CDN - no build needed) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-    <!-- Your custom CSS -->
+    <!-- Your custom CSS (FULL WIDTH FIX APPLIED) -->
     <link rel="stylesheet" href="index.css" />
 </head>
 <body>
@@ -28,15 +28,12 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <!-- ========================================================== -->
-    <!-- LOGIN / PROFILE SETUP PAGE                                 -->
+    <!-- LOGIN PAGE                                                 -->
     <!-- ========================================================== -->
     <div id="loginPage" class="login-page">
         <div class="login-card">
-            <div class="login-logo">
-                <i class="fas fa-chart-pie"></i> Finora
-            </div>
+            <div class="login-logo"><i class="fas fa-chart-pie"></i> Finora</div>
             <p class="login-sub">Welcome! Set up your profile to start tracking.</p>
-            
             <div class="login-form">
                 <div class="form-group">
                     <label for="loginName">Your Full Name</label>
@@ -58,9 +55,7 @@
                     <input type="number" id="loginBalance" placeholder="e.g., 5000" step="0.01" min="0" value="5000" />
                     <small class="text-gray-500 dark:text-gray-400 block mt-1">This will be added as your initial income.</small>
                 </div>
-                <button class="btn btn-primary w-full mt-3" id="loginBtn">
-                    <i class="fas fa-rocket"></i> Start Tracking
-                </button>
+                <button class="btn btn-primary w-full mt-3" id="loginBtn"><i class="fas fa-rocket"></i> Start Tracking</button>
             </div>
         </div>
     </div>
@@ -87,15 +82,9 @@
                 </select>
             </div>
             <div class="flex flex-wrap gap-3 mt-4">
-                <button class="btn btn-primary flex-1" id="saveSettingsBtn">
-                    <i class="fas fa-save"></i> Save Changes
-                </button>
-                <button class="btn flex-1 bg-red-500 hover:bg-red-600 text-white" id="logoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-                <button class="btn flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300" id="closeSettingsBtn">
-                    Cancel
-                </button>
+                <button class="btn btn-primary flex-1" id="saveSettingsBtn"><i class="fas fa-save"></i> Save Changes</button>
+                <button class="btn flex-1 bg-red-500 hover:bg-red-600 text-white" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                <button class="btn flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300" id="closeSettingsBtn">Cancel</button>
             </div>
         </div>
     </div>
@@ -124,17 +113,15 @@
             </div>
         </aside>
 
-        <!-- Overlay (visible only on mobile) -->
+        <!-- Overlay -->
         <div class="overlay" id="sidebarOverlay"></div>
 
-        <!-- Main Content -->
+        <!-- Main Content (FULL WIDTH) -->
         <main class="main-content" id="mainContent">
 
             <header class="top-header">
                 <div class="flex items-center gap-4">
-                    <button class="hamburger" id="menuToggle" aria-label="Toggle menu">
-                        <i class="fas fa-bars"></i>
-                    </button>
+                    <button class="hamburger" id="menuToggle"><i class="fas fa-bars"></i></button>
                     <div>
                         <h1 class="text-3xl font-bold">Dashboard</h1>
                         <p id="currentMonthDisplay" class="subtitle">July 2026 Overview</p>
@@ -142,12 +129,8 @@
                 </div>
                 <div class="header-actions">
                     <span id="headerCurrencyDisplay" class="font-semibold text-gray-500 dark:text-gray-400">USD</span>
-                    <button class="dark-toggle" id="darkModeToggle">
-                        <i class="fas fa-moon"></i> Dark
-                    </button>
-                    <button class="btn btn-primary px-5 py-2" id="addQuickBtn">
-                        <i class="fas fa-plus"></i> New
-                    </button>
+                    <button class="dark-toggle" id="darkModeToggle"><i class="fas fa-moon"></i> Dark</button>
+                    <button class="btn btn-primary px-5 py-2" id="addQuickBtn"><i class="fas fa-plus"></i> New</button>
                 </div>
             </header>
 
@@ -220,9 +203,7 @@
                                 <label><input type="radio" name="type" value="expense" /> <i class="fas fa-arrow-down text-red-500"></i> Expense</label>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" id="submitBtn">
-                            <i class="fas fa-plus"></i> Add Transaction
-                        </button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn"><i class="fas fa-plus"></i> Add Transaction</button>
                     </form>
                 </div>
 
