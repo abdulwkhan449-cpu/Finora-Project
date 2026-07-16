@@ -1,65 +1,91 @@
-/* ============================================================
-   REPORTS PAGE – ONLY Reports-Specific Styles
-   Sidebar behavior comes from index.css (inherited)
-   ============================================================ */
+/* ========== REPORTS PAGE SPECIFIC STYLES ========== */
 
-/* ----- Top Spending List ----- */
+/* Ensure the main content takes full width */
+.main-content {
+    padding: 20px 24px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+    .main-content {
+        padding: 16px 16px;
+    }
+}
+
+/* Summary Cards for Reports - we reuse .card from index.css but ensure text colors */
+.card-income .card-value {
+    color: var(--accent-green);
+}
+.card-expense .card-value {
+    color: var(--accent-red);
+}
+.card-balance .card-value {
+    color: var(--text-primary);
+}
+
+/* Override the row to have proper gaps */
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+@media (max-width: 800px) {
+    .row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+/* Make the full-width chart look better */
+.chart-box:first-child .chart-wrapper {
+    min-height: 280px;
+}
+
+/* Top Spending List styling */
 #topSpendingList .spending-item {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding: 10px 14px !important;
-    background: var(--bg-body) !important;
-    border-radius: 10px !important;
-    border: 1px solid var(--border-color) !important;
-    transition: 0.2s !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--bg-body);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    transition: 0.2s;
 }
 
 #topSpendingList .spending-item:hover {
-    background: var(--hover-bg) !important;
-    transform: translateX(4px) !important;
+    background: var(--hover-bg);
+    transform: translateX(4px);
 }
 
 #topSpendingList .spending-item .category-name {
-    font-weight: 600 !important;
-    color: var(--text-primary) !important;
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
 #topSpendingList .spending-item .category-amount {
-    font-weight: 700 !important;
-    color: var(--accent-red) !important;
+    font-weight: 700;
+    color: var(--accent-red);
 }
 
 #topSpendingList .spending-item .category-bar {
-    height: 6px !important;
-    background: var(--accent-purple) !important;
-    border-radius: 10px !important;
-    margin-top: 4px !important;
-    transition: width 0.3s ease !important;
+    height: 6px;
+    background: var(--accent-purple);
+    border-radius: 10px;
+    margin-top: 4px;
+    transition: width 0.3s ease;
 }
 
-/* ----- Dark Mode for Top Spending List ----- */
+/* Dark mode adjustments for the list */
 body.dark #topSpendingList .spending-item {
-    background: var(--bg-input) !important;
+    background: var(--bg-input);
 }
+
 body.dark #topSpendingList .spending-item:hover {
-    background: var(--hover-bg) !important;
-}
-
-/* ----- Chart Boxes ----- */
-.chart-box:first-child .chart-wrapper {
-    min-height: 280px !important;
-}
-
-/* ----- Summary Cards – color overrides ----- */
-.card-income .card-value {
-    color: var(--accent-green) !important;
-}
-.card-expense .card-value {
-    color: var(--accent-red) !important;
-}
-.card-balance .card-value {
-    color: var(--text-primary) !important;
+    background: var(--hover-bg);
 }
