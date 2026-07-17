@@ -1,5 +1,5 @@
 // ============================================================
-// 0. USER PROFILE & GLOBAL STATE
+// 0. USER PROFILE & GLOBAL Scope
 // ============================================================
 let userProfile = { name: 'Guest', currency: 'PKR', symbol: 'Rs' };
 let budgets = [];
