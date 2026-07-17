@@ -1,9 +1,8 @@
 /* ============================================================
-   BUDGETS PAGE – Specific Styles Only
-   Sidebar behavior comes from index.css
+   BUDGETS PAGE – ONLY Budgets-Specific Styles
+   Sidebar & main-content behavior comes from index.css
    ============================================================ */
 
-/* ----- Budget List Items ----- */
 .budget-item {
     display: flex;
     flex-direction: column;
@@ -63,12 +62,20 @@
 .budget-item .budget-spent.under {
     color: var(--accent-green);
 }
-
 .budget-item .budget-spent.over {
     color: var(--accent-red);
 }
-
 .budget-item .budget-spent.exact {
+    color: var(--accent-purple);
+}
+
+.budget-item .budget-remaining.under {
+    color: var(--accent-green);
+}
+.budget-item .budget-remaining.over {
+    color: var(--accent-red);
+}
+.budget-item .budget-remaining.exact {
     color: var(--accent-purple);
 }
 
@@ -91,7 +98,6 @@
     background: #f59e0b;
     color: white;
 }
-
 .budget-item .budget-actions .edit-budget-btn:hover {
     background: #d97706;
 }
@@ -100,12 +106,10 @@
     background: #ef4444;
     color: white;
 }
-
 .budget-item .budget-actions .delete-budget-btn:hover {
     background: #dc2626;
 }
 
-/* ----- Progress Bar ----- */
 .budget-progress {
     width: 100%;
     height: 8px;
@@ -124,16 +128,13 @@
 .budget-progress .progress-fill.safe {
     background: var(--accent-green);
 }
-
 .budget-progress .progress-fill.warning {
     background: #f59e0b;
 }
-
 .budget-progress .progress-fill.danger {
     background: var(--accent-red);
 }
 
-/* ----- Empty State ----- */
 .empty-budgets {
     text-align: center;
     color: var(--text-secondary);
@@ -158,35 +159,29 @@
     font-size: 0.9rem;
 }
 
-/* ----- Modal fixes for budget modal ----- */
 #budgetModal .modal-content {
     max-width: 420px;
 }
 
-/* ----- Responsive tweaks ----- */
 @media (max-width: 600px) {
     .budget-item .budget-header {
         flex-direction: column;
         align-items: stretch;
         gap: 8px;
     }
-
     .budget-item .budget-numbers {
         justify-content: space-between;
         width: 100%;
     }
-
     .budget-item .budget-actions {
         justify-content: flex-end;
         margin-top: 4px;
     }
 }
 
-/* ----- Dark mode adjustments ----- */
 body.dark .budget-item {
     background: var(--bg-card);
 }
-
 body.dark .budget-item:hover {
     border-color: var(--accent-purple);
 }
