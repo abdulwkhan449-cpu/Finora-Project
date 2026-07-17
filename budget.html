@@ -16,16 +16,11 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
     <!-- Base CSS (Sidebar & Themes) -->
     <link rel="stylesheet" href="index.css" />
 
     <!-- Budgets-specific styles -->
     <link rel="stylesheet" href="budgets.css" />
-
-     <link rel="icon" href="./logo.png" type="image/x-icon">
 </head>
 <body>
 
@@ -37,7 +32,7 @@
     <!-- ========================================================== -->
     <div class="app-container">
 
-        <!-- Sidebar -->
+        <!-- Sidebar (correctly linked to all pages) -->
         <aside class="sidebar" id="sidebar">
             <div class="logo">
                 <span class="logo-icon"><i class="fas fa-chart-pie"></i></span>
@@ -46,8 +41,8 @@
             <nav class="sidebar-nav">
                 <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
                 <a href="reports.html" class="nav-item"><i class="fas fa-chart-line"></i> Reports</a>
-                <a href="budget.html" class="nav-item active"><i class="fas fa-wallet"></i> Budgets</a>
-                <a href="#" class="nav-item" id="settingsNavTrigger"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" class="nav-item active"><i class="fas fa-wallet"></i> Budgets</a>
+                <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
             </nav>
             <div class="sidebar-user">
                 <div class="avatar" id="userAvatar">JD</div>
@@ -71,7 +66,7 @@
                     </div>
                 </div>
                 <div class="header-actions">
-                    <span id="headerCurrencyDisplay" class="font-semibold text-gray-500 dark:text-gray-400">USD</span>
+                    <span id="headerCurrencyDisplay" class="font-semibold text-gray-500 dark:text-gray-400">PKR</span>
                     <button class="dark-toggle" id="darkModeToggle"><i class="fas fa-moon"></i> Dark</button>
                     <button class="btn btn-primary px-5 py-2" id="addBudgetBtn">
                         <i class="fas fa-plus"></i> New Budget
@@ -79,16 +74,16 @@
                 </div>
             </header>
 
-            <!-- Quick Stats -->
-            <div class="summary-grid" id="budgetSummary">
+            <!-- Quick Stats (shows real totals from transactions) -->
+            <section class="summary-grid">
                 <div class="card card-balance">
                     <div class="card-header"><i class="fas fa-wallet"></i> Total Budget</div>
-                    <div class="card-value" id="totalBudgetDisplay">$0.00</div>
+                    <div class="card-value" id="totalBudgetDisplay">Rs0.00</div>
                     <div class="card-footer">Across all categories</div>
                 </div>
                 <div class="card card-income">
                     <div class="card-header"><i class="fas fa-arrow-up"></i> Total Spent</div>
-                    <div class="card-value" id="totalSpentDisplay">$0.00</div>
+                    <div class="card-value" id="totalSpentDisplay">Rs0.00</div>
                     <div class="card-footer">Against budgets</div>
                 </div>
                 <div class="card card-savings">
@@ -96,9 +91,9 @@
                     <div class="card-value" id="overallUsageDisplay">0%</div>
                     <div class="card-footer">of total budget used</div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Filter: Month -->
+            <!-- Filter: Month (same as dashboard) -->
             <div class="filter-bar">
                 <div class="filter-left">
                     <label for="budgetMonthFilter"><i class="fas fa-calendar-alt"></i> Month:</label>
@@ -155,7 +150,7 @@
     </div>
 
     <!-- ========================================================== -->
-    <!-- SETTINGS MODAL                                             -->
+    <!-- SETTINGS MODAL (reused from index)                         -->
     <!-- ========================================================== -->
     <div id="settingsModal" class="modal-overlay">
         <div class="modal-content">
@@ -167,7 +162,7 @@
             <div class="form-group">
                 <label for="settingsCurrency">Currency</label>
                 <select id="settingsCurrency">
-                    <option value="PKR">🇵🇰 PKR (Rs)</option>
+                    <option value="PKR" selected>🇵🇰 PKR (Rs)</option>
                     <option value="USD">🇺🇸 USD ($)</option>
                     <option value="EUR">🇪🇺 EUR (€)</option>
                     <option value="GBP">🇬🇧 GBP (£)</option>
@@ -177,7 +172,6 @@
             </div>
             <div class="flex flex-wrap gap-3 mt-4">
                 <button class="btn btn-primary flex-1" id="saveSettingsBtn"><i class="fas fa-save"></i> Save Changes</button>
-                <button class="btn flex-1 bg-red-500 hover:bg-red-600 text-white" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 <button class="btn flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300" id="closeSettingsBtn">Cancel</button>
             </div>
         </div>
