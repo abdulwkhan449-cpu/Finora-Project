@@ -1,9 +1,10 @@
 // ============================================================
 // 0. USER PROFILE & GLOBAL STATE
 // ============================================================
-let userProfile = { name: 'Guest', currency: 'USD', symbol: '$' };
+let userProfile = { name: 'Guest', currency: 'PKR', symbol: 'Rs' };
 let budgets = [];
 let editingBudgetId = null;
+
 const CURRENCY_SYMBOLS = { PKR: 'Rs', USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥' };
 const CATEGORY_ICONS = {
     'Food & Dining': 'fa-utensils',
@@ -17,14 +18,14 @@ const CATEGORY_ICONS = {
 };
 
 // ============================================================
-// 1. LOAD USER PROFILE & THEME
+// 1. LOAD USER PROFILE
 // ============================================================
 function loadUserProfile() {
     const stored = localStorage.getItem('userProfile');
     if (stored) {
         userProfile = JSON.parse(stored);
         if (!userProfile.symbol || !CURRENCY_SYMBOLS[userProfile.currency]) {
-            userProfile.symbol = CURRENCY_SYMBOLS[userProfile.currency] || '$';
+            userProfile.symbol = CURRENCY_SYMBOLS[userProfile.currency] || 'Rs';
         }
         return true;
     }
@@ -39,12 +40,12 @@ function updateUIWithUser() {
 }
 
 function formatCurrency(amount) {
-    const symbol = userProfile.symbol || '$';
+    const symbol = userProfile.symbol || 'Rs';
     return symbol + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 // ============================================================
-// 2. SIDEBAR LOGIC (Identical to index.js)
+// 2. SIDEBAR LOGIC (identical to index.js)
 // ============================================================
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('sidebarOverlay');
@@ -54,13 +55,11 @@ const mainContent = document.getElementById('mainContent');
 function toggleSidebar(forceState) {
     const isOpen = forceState !== undefined ? forceState : !sidebar.classList.contains('open');
     sidebar.classList.toggle('open', isOpen);
-
     if (window.innerWidth < 901) {
         overlay.classList.toggle('active', isOpen);
     } else {
         overlay.classList.remove('active');
     }
-
     if (window.innerWidth >= 901) {
         mainContent.classList.toggle('sidebar-open', isOpen);
     } else {
@@ -97,51 +96,31 @@ window.addEventListener('resize', () => {
 });
 
 // ============================================================
-// 3. SETTINGS MODAL (Identical to index.js)
+// 3. SETTINGS MODAL
 // ============================================================
 const settingsModal = document.getElementById('settingsModal');
-const settingsNavTrigger = document.getElementById('settingsNavTrigger');
 const closeSettingsBtn = document.getElementById('closeSettingsBtn');
 const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-const logoutBtn = document.getElementById('logoutBtn');
 const settingsName = document.getElementById('settingsName');
 const settingsCurrency = document.getElementById('settingsCurrency');
 
-function openSettings() {
-    settingsName.value = userProfile.name;
-    settingsCurrency.value = userProfile.currency;
-    settingsModal.classList.add('active');
-}
-function closeSettings() {
-    settingsModal.classList.remove('active');
-}
-settingsNavTrigger.addEventListener('click', openSettings);
-closeSettingsBtn.addEventListener('click', closeSettings);
+closeSettingsBtn.addEventListener('click', () => { settingsModal.classList.remove('active'); });
 settingsModal.addEventListener('click', (e) => {
-    if (e.target === settingsModal) closeSettings();
+    if (e.target === settingsModal) settingsModal.classList.remove('active');
 });
 
 saveSettingsBtn.addEventListener('click', () => {
     const name = settingsName.value.trim();
     const currency = settingsCurrency.value;
     if (!name) return showToast('Please enter a name.', 'error');
-
     userProfile.name = name;
     userProfile.currency = currency;
-    userProfile.symbol = CURRENCY_SYMBOLS[currency] || '$';
+    userProfile.symbol = CURRENCY_SYMBOLS[currency] || 'Rs';
     localStorage.setItem('userProfile', JSON.stringify(userProfile));
     updateUIWithUser();
     renderAll();
     closeSettings();
-    showToast('✅ Settings updated successfully!', 'success');
-});
-
-logoutBtn.addEventListener('click', () => {
-    closeSettings();
-    if (confirm('Are you sure you want to logout?')) {
-        localStorage.removeItem('userProfile');
-        window.location.href = 'index.html';
-    }
+    showToast('✅ Settings updated!', 'success');
 });
 
 // ============================================================
@@ -157,14 +136,12 @@ const budgetModalTitle = document.getElementById('budgetModalTitle');
 function openBudgetModal(category = null, amount = null, id = null) {
     budgetModal.classList.add('active');
     if (id !== null) {
-        // Edit mode
         editingBudgetId = id;
         budgetModalTitle.innerHTML = '<i class="fas fa-pen text-purple-600"></i> Edit Budget';
         saveBudgetBtn.innerHTML = '<i class="fas fa-save"></i> Update Budget';
         if (category) budgetCategory.value = category;
         if (amount) budgetAmount.value = amount;
     } else {
-        // Add mode
         editingBudgetId = null;
         budgetModalTitle.innerHTML = '<i class="fas fa-plus-circle text-purple-600"></i> Set Budget';
         saveBudgetBtn.innerHTML = '<i class="fas fa-save"></i> Save Budget';
@@ -182,6 +159,54 @@ closeBudgetBtn.addEventListener('click', closeBudgetModal);
 budgetModal.addEventListener('click', (e) => {
     if (e.target === budgetModal) closeBudgetModal();
 });
+
+document.getElementById('addBudgetBtn').addEventListener('click', () => {
+    openBudgetModal();
+});
+
+saveBudgetBtn.addEventListener('click', () => {
+    const category = budgetCategory.value;
+    const amount = parseFloat(budgetAmount.value);
+    if (!category) return showToast('Select a category.', 'error');
+    if (isNaN(amount) || amount <= 0) return showToast('Enter a valid positive amount.', 'error');
+
+    if (editingBudgetId === null) {
+        // Check for duplicate category
+        const existing = budgets.find(b => b.category === category);
+        if (existing) {
+            return showToast(`A budget for "${category}" already exists.`, 'error');
+        }
+        budgets.push({ id: Date.now().toString(), category, amount });
+        showToast(`✅ Budget set for "${category}"`, 'success');
+    } else {
+        const index = budgets.findIndex(b => b.id === editingBudgetId);
+        if (index !== -1) {
+            budgets[index].category = category;
+            budgets[index].amount = amount;
+            showToast(`✅ Budget updated for "${category}"`, 'success');
+        }
+        editingBudgetId = null;
+    }
+    saveBudgets();
+    closeBudgetModal();
+    renderAll();
+});
+
+function editBudget(id) {
+    const budget = budgets.find(b => b.id === id);
+    if (!budget) return;
+    openBudgetModal(budget.category, budget.amount, budget.id);
+}
+
+function deleteBudget(id) {
+    const budget = budgets.find(b => b.id === id);
+    if (!budget) return;
+    if (!confirm(`Delete budget for "${budget.category}"?`)) return;
+    budgets = budgets.filter(b => b.id !== id);
+    saveBudgets();
+    renderAll();
+    showToast(`🗑️ Budget deleted for "${budget.category}"`, 'info');
+}
 
 // ============================================================
 // 5. TOAST SYSTEM
@@ -220,7 +245,7 @@ function loadBudgets() {
     if (stored) {
         budgets = JSON.parse(stored);
     } else {
-        // Seed with default budgets
+        // Seed with default budgets (so it's not empty on first visit)
         budgets = [
             { id: Date.now() + 1, category: 'Food & Dining', amount: 500 },
             { id: Date.now() + 2, category: 'Transport', amount: 200 },
@@ -236,6 +261,9 @@ function saveBudgets() {
     localStorage.setItem('budgets', JSON.stringify(budgets));
 }
 
+// ============================================================
+// 8. LOAD TRANSACTIONS (SHARED WITH DASHBOARD & REPORTS)
+// ============================================================
 function loadTransactions() {
     const stored = localStorage.getItem('financeData');
     if (stored) {
@@ -257,7 +285,7 @@ function getCategorySpending(transactions, category, month) {
 }
 
 // ============================================================
-// 8. RENDER ALL
+// 9. RENDER ALL
 // ============================================================
 function renderAll() {
     const month = document.getElementById('budgetMonthFilter').value;
@@ -271,7 +299,7 @@ function renderAll() {
     }
 
     loadBudgets();
-    const transactions = loadTransactions();
+    const transactions = loadTransactions(); // uses the same data as dashboard
     const selectedMonth = document.getElementById('budgetMonthFilter').value;
 
     renderBudgetList(transactions, selectedMonth);
@@ -284,10 +312,11 @@ function updateMonthLabel(month) {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const label = `${months[parseInt(m) - 1]} ${year}`;
     document.getElementById('listMonthLabel').textContent = `For ${label}`;
+    document.getElementById('currentMonthDisplay').textContent = `Managing budgets for ${label}`;
 }
 
 // ============================================================
-// 9. RENDER BUDGET LIST
+// 10. RENDER BUDGET LIST
 // ============================================================
 function renderBudgetList(transactions, month) {
     const container = document.getElementById('budgetList');
@@ -328,13 +357,13 @@ function renderBudgetList(transactions, month) {
             overCount++;
         } else if (percentage >= 80) {
             statusClass = 'over';
-            statusText = `⚠️ ${formatCurrency(Math.abs(remaining))} remaining`;
+            statusText = `⚠️ ${formatCurrency(remaining)} remaining`;
             progressClass = 'warning';
         }
 
         if (percentage === 0 && spent === 0) {
             statusClass = 'under';
-            statusText = `No spending yet`;
+            statusText = 'No spending yet';
             progressClass = 'safe';
             progressWidth = 0;
         }
@@ -368,7 +397,7 @@ function renderBudgetList(transactions, month) {
 }
 
 // ============================================================
-// 10. RENDER BUDGET SUMMARY
+// 11. RENDER BUDGET SUMMARY
 // ============================================================
 function renderBudgetSummary(transactions, month) {
     let totalBudget = 0;
@@ -387,72 +416,7 @@ function renderBudgetSummary(transactions, month) {
 }
 
 // ============================================================
-// 11. CRUD: CREATE BUDGET
-// ============================================================
-document.getElementById('addBudgetBtn').addEventListener('click', () => {
-    openBudgetModal();
-});
-
-saveBudgetBtn.addEventListener('click', () => {
-    const category = budgetCategory.value;
-    const amount = parseFloat(budgetAmount.value);
-
-    if (!category) return showToast('Please select a category.', 'error');
-    if (isNaN(amount) || amount <= 0) return showToast('Please enter a valid positive amount.', 'error');
-
-    // Check if category already has a budget (for add mode)
-    if (editingBudgetId === null) {
-        const existing = budgets.find(b => b.category === category);
-        if (existing) {
-            return showToast(`A budget for "${category}" already exists. Edit it instead.`, 'error');
-        }
-        const newBudget = {
-            id: Date.now().toString(),
-            category: category,
-            amount: amount
-        };
-        budgets.push(newBudget);
-        showToast(`✅ Budget set for "${category}"`, 'success');
-    } else {
-        // Edit mode
-        const index = budgets.findIndex(b => b.id === editingBudgetId);
-        if (index !== -1) {
-            budgets[index].category = category;
-            budgets[index].amount = amount;
-            showToast(`✅ Budget updated for "${category}"`, 'success');
-        }
-        editingBudgetId = null;
-    }
-
-    saveBudgets();
-    closeBudgetModal();
-    renderAll();
-});
-
-// ============================================================
-// 12. CRUD: EDIT BUDGET
-// ============================================================
-function editBudget(id) {
-    const budget = budgets.find(b => b.id === id);
-    if (!budget) return;
-    openBudgetModal(budget.category, budget.amount, budget.id);
-}
-
-// ============================================================
-// 13. CRUD: DELETE BUDGET
-// ============================================================
-function deleteBudget(id) {
-    const budget = budgets.find(b => b.id === id);
-    if (!budget) return;
-    if (!confirm(`Delete budget for "${budget.category}"?`)) return;
-    budgets = budgets.filter(b => b.id !== id);
-    saveBudgets();
-    renderAll();
-    showToast(`🗑️ Budget deleted for "${budget.category}"`, 'info');
-}
-
-// ============================================================
-// 14. INITIALIZATION
+// 12. INITIALIZATION
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
     const hasUser = loadUserProfile();
@@ -477,6 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('budgetMonthFilter').addEventListener('change', renderAll);
 
+    // Restore sidebar state
     const savedSidebarState = localStorage.getItem('sidebarOpen');
     const isDesktop = window.innerWidth >= 901;
     let defaultOpen = isDesktop;
