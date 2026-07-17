@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="index.css" />
 
     <!-- Budgets-specific styles -->
-    <link rel="stylesheet" href="budgets.css" />
+    <link rel="stylesheet" href="budget.css" />
 </head>
 <body>
 
@@ -57,64 +57,70 @@
         <!-- Main Content -->
         <main class="main-content" id="mainContent">
 
-            <header class="top-header">
-                <div class="flex items-center gap-4">
-                    <button class="hamburger" id="menuToggle"><i class="fas fa-bars"></i></button>
-                    <div>
-                        <h1 class="text-3xl font-bold">Budgets</h1>
-                        <p id="currentMonthDisplay" class="subtitle">Manage your monthly spending limits</p>
+            <!-- ===== Boxed container ===== -->
+            <div class="budgets-container">
+
+                <header class="top-header">
+                    <div class="flex items-center gap-4">
+                        <button class="hamburger" id="menuToggle"><i class="fas fa-bars"></i></button>
+                        <div>
+                            <h1 class="text-3xl font-bold">Budgets</h1>
+                            <p id="currentMonthDisplay" class="subtitle">Manage your monthly spending limits</p>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <span id="headerCurrencyDisplay" class="font-semibold text-gray-500 dark:text-gray-400">PKR</span>
+                        <button class="dark-toggle" id="darkModeToggle"><i class="fas fa-moon"></i> Dark</button>
+                        <button class="btn btn-primary px-5 py-2" id="addBudgetBtn">
+                            <i class="fas fa-plus"></i> New Budget
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Summary Cards -->
+                <section class="summary-grid">
+                    <div class="card card-balance">
+                        <div class="card-header"><i class="fas fa-wallet"></i> Total Budget</div>
+                        <div class="card-value" id="totalBudgetDisplay">Rs0.00</div>
+                        <div class="card-footer">Across all categories</div>
+                    </div>
+                    <div class="card card-income">
+                        <div class="card-header"><i class="fas fa-arrow-up"></i> Total Spent</div>
+                        <div class="card-value" id="totalSpentDisplay">Rs0.00</div>
+                        <div class="card-footer">Against budgets</div>
+                    </div>
+                    <div class="card card-savings">
+                        <div class="card-header"><i class="fas fa-percentage"></i> Overall Usage</div>
+                        <div class="card-value" id="overallUsageDisplay">0%</div>
+                        <div class="card-footer">of total budget used</div>
+                    </div>
+                </section>
+
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-left">
+                        <label for="budgetMonthFilter"><i class="fas fa-calendar-alt"></i> Month:</label>
+                        <input type="month" id="budgetMonthFilter" />
+                    </div>
+                    <div class="filter-right">
+                        <span class="stat-badge" id="budgetCountBadge"><i class="fas fa-list"></i> 0 Budgets</span>
+                        <span class="stat-badge" id="overBudgetBadge"><i class="fas fa-exclamation-triangle"></i> 0 Over Budget</span>
                     </div>
                 </div>
-                <div class="header-actions">
-                    <span id="headerCurrencyDisplay" class="font-semibold text-gray-500 dark:text-gray-400">PKR</span>
-                    <button class="dark-toggle" id="darkModeToggle"><i class="fas fa-moon"></i> Dark</button>
-                    <button class="btn btn-primary px-5 py-2" id="addBudgetBtn">
-                        <i class="fas fa-plus"></i> New Budget
-                    </button>
-                </div>
-            </header>
 
-            <!-- Summary Cards (matches dashboard style) -->
-            <section class="summary-grid">
-                <div class="card card-balance">
-                    <div class="card-header"><i class="fas fa-wallet"></i> Total Budget</div>
-                    <div class="card-value" id="totalBudgetDisplay">Rs0.00</div>
-                    <div class="card-footer">Across all categories</div>
+                <!-- Budgets List -->
+                <div class="list-box">
+                    <div class="list-header">
+                        <h2 class="text-xl font-semibold"><i class="fas fa-wallet text-purple-600"></i> Your Budgets</h2>
+                        <span id="listMonthLabel" class="text-sm text-gray-500 dark:text-gray-400">For July 2026</span>
+                    </div>
+                    <div id="budgetList">
+                        <!-- Rendered by JS -->
+                    </div>
                 </div>
-                <div class="card card-income">
-                    <div class="card-header"><i class="fas fa-arrow-up"></i> Total Spent</div>
-                    <div class="card-value" id="totalSpentDisplay">Rs0.00</div>
-                    <div class="card-footer">Against budgets</div>
-                </div>
-                <div class="card card-savings">
-                    <div class="card-header"><i class="fas fa-percentage"></i> Overall Usage</div>
-                    <div class="card-value" id="overallUsageDisplay">0%</div>
-                    <div class="card-footer">of total budget used</div>
-                </div>
-            </section>
 
-            <!-- Filter Bar -->
-            <div class="filter-bar">
-                <div class="filter-left">
-                    <label for="budgetMonthFilter"><i class="fas fa-calendar-alt"></i> Month:</label>
-                    <input type="month" id="budgetMonthFilter" />
-                </div>
-                <div class="filter-right">
-                    <span class="stat-badge" id="budgetCountBadge"><i class="fas fa-list"></i> 0 Budgets</span>
-                    <span class="stat-badge" id="overBudgetBadge"><i class="fas fa-exclamation-triangle"></i> 0 Over Budget</span>
-                </div>
             </div>
-
-            <!-- Budgets List -->
-            <div class="list-box">
-                <div class="list-header">
-                    <h2 class="text-xl font-semibold"><i class="fas fa-wallet text-purple-600"></i> Your Budgets</h2>
-                    <span id="listMonthLabel" class="text-sm text-gray-500 dark:text-gray-400">For July 2026</span>
-                </div>
-                <div id="budgetList">
-                    <!-- Rendered by JS -->
-                </div>
-            </div>
+            <!-- ===== End container ===== -->
 
         </main>
     </div>
@@ -150,7 +156,7 @@
     </div>
 
     <!-- ========================================================== -->
-    <!-- SETTINGS MODAL                                             -->
+    <!-- SETTINGS MODAL (reused from index)                         -->
     <!-- ========================================================== -->
     <div id="settingsModal" class="modal-overlay">
         <div class="modal-content">
@@ -162,7 +168,7 @@
             <div class="form-group">
                 <label for="settingsCurrency">Currency</label>
                 <select id="settingsCurrency">
-                    <option value="PKR">🇵🇰 PKR (Rs)</option>
+                    <option value="PKR" selected>🇵🇰 PKR (Rs)</option>
                     <option value="USD">🇺🇸 USD ($)</option>
                     <option value="EUR">🇪🇺 EUR (€)</option>
                     <option value="GBP">🇬🇧 GBP (£)</option>
@@ -177,6 +183,6 @@
         </div>
     </div>
 
-    <script src="budgets.js"></script>
+    <script src="budget.js"></script>
 </body>
 </html>
