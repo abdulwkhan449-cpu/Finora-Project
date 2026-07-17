@@ -3,18 +3,18 @@
    Sidebar & main-content behavior comes from index.css
    ============================================================ */
 
-/* ----- Container: Boxed width, centered ----- */
+/* ----- Container: Boxed width, reduced left padding ----- */
 .reports-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 0 16px 0 8px;  /* Left padding reduced to 8px */
     width: 100%;
     box-sizing: border-box;
 }
 
 @media (min-width: 640px) {
     .reports-container {
-        padding: 0 24px;
+        padding: 0 24px 0 12px;  /* Left padding reduced on desktop */
     }
 }
 
