@@ -1,6 +1,22 @@
 /* ============================================================
-   BUDGETS PAGE – Beautiful, Clean Design
+   BUDGETS PAGE – ONLY Budgets-Specific Styles
+   Sidebar & main-content behavior comes from index.css
    ============================================================ */
+
+/* ----- Container: Boxed width, reduced left padding ----- */
+.budgets-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px 0 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+    .budgets-container {
+        padding: 0 24px 0 12px;
+    }
+}
 
 /* ----- Budget List Items ----- */
 .budget-item {
