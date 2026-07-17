@@ -72,6 +72,18 @@
     color: var(--accent-purple);
 }
 
+.budget-item .budget-remaining.under {
+    color: var(--accent-green);
+}
+
+.budget-item .budget-remaining.over {
+    color: var(--accent-red);
+}
+
+.budget-item .budget-remaining.exact {
+    color: var(--accent-purple);
+}
+
 .budget-item .budget-actions {
     display: flex;
     gap: 6px;
