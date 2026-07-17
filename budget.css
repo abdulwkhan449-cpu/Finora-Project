@@ -1,24 +1,39 @@
 /* ============================================================
-   BUDGETS PAGE – ONLY Budgets-Specific Styles
-   Sidebar & main-content behavior comes from index.css
+   BUDGETS PAGE – Beautiful, Clean Design
    ============================================================ */
 
+/* ----- Budget List Items ----- */
 .budget-item {
     display: flex;
     flex-direction: column;
-    padding: 16px 20px;
+    padding: 18px 22px;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
-    margin-bottom: 12px;
-    transition: 0.2s;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    transition: all 0.3s ease;
     width: 100%;
     box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.budget-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--accent-purple);
+    border-radius: 0 4px 4px 0;
+    opacity: 0.6;
 }
 
 .budget-item:hover {
     border-color: var(--accent-purple);
     box-shadow: var(--shadow-hover);
+    transform: translateX(4px);
 }
 
 .budget-item .budget-header {
@@ -27,23 +42,28 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .budget-item .budget-category {
     font-weight: 700;
     font-size: 1.1rem;
     color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .budget-item .budget-category i {
-    margin-right: 8px;
+    font-size: 1.2rem;
     color: var(--accent-purple);
+    width: 28px;
+    text-align: center;
 }
 
 .budget-item .budget-numbers {
     display: flex;
-    gap: 20px;
+    gap: 18px;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -51,7 +71,10 @@
 .budget-item .budget-limit {
     font-weight: 600;
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    background: var(--bg-body);
+    padding: 4px 12px;
+    border-radius: 20px;
 }
 
 .budget-item .budget-spent {
@@ -69,14 +92,24 @@
     color: var(--accent-purple);
 }
 
+.budget-item .budget-remaining {
+    font-weight: 500;
+    font-size: 0.85rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
 .budget-item .budget-remaining.under {
     color: var(--accent-green);
+    background: rgba(16, 185, 129, 0.1);
 }
 .budget-item .budget-remaining.over {
     color: var(--accent-red);
+    background: rgba(239, 68, 68, 0.1);
 }
 .budget-item .budget-remaining.exact {
     color: var(--accent-purple);
+    background: rgba(124, 58, 237, 0.1);
 }
 
 .budget-item .budget-actions {
@@ -85,13 +118,16 @@
 }
 
 .budget-item .budget-actions button {
-    padding: 4px 12px;
+    padding: 5px 12px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.75rem;
     transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .budget-item .budget-actions .edit-budget-btn {
@@ -100,6 +136,7 @@
 }
 .budget-item .budget-actions .edit-budget-btn:hover {
     background: #d97706;
+    transform: scale(1.05);
 }
 
 .budget-item .budget-actions .delete-budget-btn {
@@ -108,8 +145,10 @@
 }
 .budget-item .budget-actions .delete-budget-btn:hover {
     background: #dc2626;
+    transform: scale(1.05);
 }
 
+/* ----- Progress Bar ----- */
 .budget-progress {
     width: 100%;
     height: 8px;
@@ -122,63 +161,82 @@
 .budget-progress .progress-fill {
     height: 100%;
     border-radius: 10px;
-    transition: width 0.6s ease;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .budget-progress .progress-fill.safe {
-    background: var(--accent-green);
-}
-.budget-progress .progress-fill.warning {
-    background: #f59e0b;
-}
-.budget-progress .progress-fill.danger {
-    background: var(--accent-red);
+    background: linear-gradient(90deg, #10b981, #34d399);
 }
 
+.budget-progress .progress-fill.warning {
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.budget-progress .progress-fill.danger {
+    background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+/* ----- Empty State (beautiful) ----- */
 .empty-budgets {
     text-align: center;
     color: var(--text-secondary);
-    padding: 40px 20px;
+    padding: 60px 20px;
 }
 
 .empty-budgets i {
-    font-size: 3rem;
-    margin-bottom: 12px;
+    font-size: 4rem;
+    margin-bottom: 16px;
     display: block;
     color: var(--border-color);
 }
 
 .empty-budgets h3 {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
 .empty-budgets p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
+/* ----- Modal fixes ----- */
 #budgetModal .modal-content {
     max-width: 420px;
 }
 
+/* ----- Responsive ----- */
 @media (max-width: 600px) {
+    .budget-item {
+        padding: 14px 16px;
+    }
+    
     .budget-item .budget-header {
         flex-direction: column;
         align-items: stretch;
         gap: 8px;
     }
+
     .budget-item .budget-numbers {
         justify-content: space-between;
         width: 100%;
+        gap: 8px;
     }
+
     .budget-item .budget-actions {
         justify-content: flex-end;
         margin-top: 4px;
     }
+    
+    .budget-item::before {
+        width: 3px;
+    }
 }
 
+/* ----- Dark mode ----- */
 body.dark .budget-item {
     background: var(--bg-card);
 }
