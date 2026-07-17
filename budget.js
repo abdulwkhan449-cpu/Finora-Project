@@ -45,7 +45,7 @@ function formatCurrency(amount) {
 }
 
 // ============================================================
-// 2. SIDEBAR LOGIC (identical to index.js)
+// 2. SIDEBAR LOGIC
 // ============================================================
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('sidebarOverlay');
@@ -55,11 +55,13 @@ const mainContent = document.getElementById('mainContent');
 function toggleSidebar(forceState) {
     const isOpen = forceState !== undefined ? forceState : !sidebar.classList.contains('open');
     sidebar.classList.toggle('open', isOpen);
+
     if (window.innerWidth < 901) {
         overlay.classList.toggle('active', isOpen);
     } else {
         overlay.classList.remove('active');
     }
+
     if (window.innerWidth >= 901) {
         mainContent.classList.toggle('sidebar-open', isOpen);
     } else {
@@ -171,7 +173,6 @@ saveBudgetBtn.addEventListener('click', () => {
     if (isNaN(amount) || amount <= 0) return showToast('Enter a valid positive amount.', 'error');
 
     if (editingBudgetId === null) {
-        // Check for duplicate category
         const existing = budgets.find(b => b.category === category);
         if (existing) {
             return showToast(`A budget for "${category}" already exists.`, 'error');
@@ -245,7 +246,7 @@ function loadBudgets() {
     if (stored) {
         budgets = JSON.parse(stored);
     } else {
-        // Seed with default budgets (so it's not empty on first visit)
+        // SEED WITH DEFAULT BUDGETS (so it looks great immediately)
         budgets = [
             { id: Date.now() + 1, category: 'Food & Dining', amount: 500 },
             { id: Date.now() + 2, category: 'Transport', amount: 200 },
@@ -262,7 +263,7 @@ function saveBudgets() {
 }
 
 // ============================================================
-// 8. LOAD TRANSACTIONS (SHARED WITH DASHBOARD & REPORTS)
+// 8. LOAD TRANSACTIONS (SHARED WITH DASHBOARD)
 // ============================================================
 function loadTransactions() {
     const stored = localStorage.getItem('financeData');
@@ -299,7 +300,7 @@ function renderAll() {
     }
 
     loadBudgets();
-    const transactions = loadTransactions(); // uses the same data as dashboard
+    const transactions = loadTransactions();
     const selectedMonth = document.getElementById('budgetMonthFilter').value;
 
     renderBudgetList(transactions, selectedMonth);
@@ -363,7 +364,7 @@ function renderBudgetList(transactions, month) {
 
         if (percentage === 0 && spent === 0) {
             statusClass = 'under';
-            statusText = 'No spending yet';
+            statusText = 'No spending yet 🎯';
             progressClass = 'safe';
             progressWidth = 0;
         }
@@ -375,8 +376,8 @@ function renderBudgetList(transactions, month) {
                         <span class="budget-category"><i class="fas ${icon}"></i> ${budget.category}</span>
                     </div>
                     <div class="budget-numbers">
-                        <span class="budget-limit">Limit: ${formatCurrency(budget.amount)}</span>
-                        <span class="budget-spent ${statusClass}">Spent: ${formatCurrency(spent)}</span>
+                        <span class="budget-limit"><i class="fas fa-bullseye"></i> ${formatCurrency(budget.amount)}</span>
+                        <span class="budget-spent ${statusClass}"><i class="fas fa-arrow-right"></i> ${formatCurrency(spent)}</span>
                         <span class="budget-remaining ${statusClass}">${statusText}</span>
                         <div class="budget-actions">
                             <button class="edit-budget-btn" onclick="editBudget('${budget.id}')"><i class="fas fa-pen"></i></button>
@@ -416,7 +417,17 @@ function renderBudgetSummary(transactions, month) {
 }
 
 // ============================================================
-// 12. INITIALIZATION
+// 12. LISTEN FOR STORAGE CHANGES (sync with dashboard)
+// ============================================================
+window.addEventListener('storage', (e) => {
+    if (e.key === 'financeData' || e.key === 'userProfile' || e.key === 'darkMode') {
+        renderAll();
+        updateUIWithUser();
+    }
+});
+
+// ============================================================
+// 13. INITIALIZATION
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
     const hasUser = loadUserProfile();
@@ -425,7 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Set month filter to current month
     const now = new Date();
     const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     document.getElementById('budgetMonthFilter').value = monthStr;
@@ -441,7 +451,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('budgetMonthFilter').addEventListener('change', renderAll);
 
-    // Restore sidebar state
     const savedSidebarState = localStorage.getItem('sidebarOpen');
     const isDesktop = window.innerWidth >= 901;
     let defaultOpen = isDesktop;
