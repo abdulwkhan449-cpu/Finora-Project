@@ -1,0 +1,254 @@
+/* ============================================================
+   SETTINGS PAGE – Specific Styles Only
+   Sidebar behavior comes from index.css
+   ============================================================ */
+
+/* ----- Settings Container ----- */
+.settings-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 0 20px 0;
+}
+
+/* ----- Settings Section ----- */
+.settings-section {
+    margin-bottom: 32px;
+    width: 100%;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.section-header i {
+    font-size: 1.3rem;
+    width: 32px;
+    text-align: center;
+}
+
+.section-header h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.section-header .section-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-left: auto;
+}
+
+@media (max-width: 600px) {
+    .section-header .section-subtitle {
+        margin-left: 0;
+        width: 100%;
+        padding-left: 44px;
+    }
+}
+
+/* ----- Settings Card ----- */
+.settings-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius, 16px);
+    padding: 24px 28px;
+    box-shadow: var(--shadow);
+    transition: 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.settings-card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+/* ----- Form inside settings ----- */
+.settings-card .form-group {
+    margin-bottom: 16px;
+}
+
+.settings-card .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.settings-card .form-group label i {
+    margin-right: 6px;
+}
+
+.settings-card .form-group input,
+.settings-card .form-group select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: 0.2s;
+}
+
+.settings-card .form-group input:focus,
+.settings-card .form-group select:focus {
+    outline: 2px solid var(--accent-purple);
+    border-color: transparent;
+}
+
+/* ----- Toggle Switch (Dark Mode) ----- */
+.appearance-option {
+    padding: 4px 0;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: var(--border-color);
+    border-radius: 30px;
+    transition: 0.3s;
+}
+
+.toggle-slider::before {
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: var(--accent-purple);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(22px);
+}
+
+/* ----- Data Action Buttons ----- */
+.data-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.data-btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    background: var(--bg-body);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+    width: 100%;
+    text-align: left;
+    color: var(--text-primary);
+}
+
+.data-btn:hover {
+    background: var(--hover-bg);
+    transform: translateX(4px);
+    border-color: var(--accent-purple);
+}
+
+.data-btn i:first-child {
+    font-size: 1.3rem;
+    width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.data-btn div {
+    flex: 1;
+}
+
+.data-btn div span {
+    display: block;
+}
+
+.data-btn div p {
+    margin: 0;
+    font-weight: 400;
+}
+
+.export-btn i:first-child {
+    color: #10b981;
+}
+
+.import-btn i:first-child {
+    color: #3b82f6;
+}
+
+.clear-btn i:first-child {
+    color: #ef4444;
+}
+
+.logout-btn i:first-child {
+    color: #ef4444;
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 600px) {
+    .settings-card {
+        padding: 18px 16px;
+    }
+
+    .data-btn {
+        padding: 12px 14px;
+        gap: 12px;
+    }
+
+    .data-btn i:first-child {
+        font-size: 1.1rem;
+        width: 28px;
+    }
+
+    .settings-container {
+        padding: 0;
+    }
+}
+
+/* ----- Dark Mode Adjustments ----- */
+body.dark .settings-card {
+    background: var(--bg-card);
+}
+
+body.dark .data-btn {
+    background: var(--bg-input);
+}
+
+body.dark .data-btn:hover {
+    background: var(--hover-bg);
+}
+
+body.dark .toggle-slider {
+    background: var(--border-color);
+}
