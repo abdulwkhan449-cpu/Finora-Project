@@ -1,9 +1,8 @@
 /* ============================================================
-   SETTINGS PAGE – Specific Styles Only
-   Sidebar behavior comes from index.css
+   SETTINGS PAGE – Only Settings-Specific Styles
+   Sidebar & main-content behavior comes from index.css
    ============================================================ */
 
-/* ----- Settings Container ----- */
 .settings-container {
     width: 100%;
     max-width: 800px;
@@ -11,7 +10,6 @@
     padding: 0 0 20px 0;
 }
 
-/* ----- Settings Section ----- */
 .settings-section {
     margin-bottom: 32px;
     width: 100%;
@@ -52,7 +50,6 @@
     }
 }
 
-/* ----- Settings Card ----- */
 .settings-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -68,7 +65,6 @@
     box-shadow: var(--shadow-hover);
 }
 
-/* ----- Form inside settings ----- */
 .settings-card .form-group {
     margin-bottom: 16px;
 }
@@ -103,7 +99,6 @@
     border-color: transparent;
 }
 
-/* ----- Toggle Switch (Dark Mode) ----- */
 .appearance-option {
     padding: 4px 0;
 }
@@ -151,7 +146,6 @@
     transform: translateX(22px);
 }
 
-/* ----- Data Action Buttons ----- */
 .data-actions {
     display: flex;
     flex-direction: column;
@@ -202,53 +196,42 @@
 .export-btn i:first-child {
     color: #10b981;
 }
-
 .import-btn i:first-child {
     color: #3b82f6;
 }
-
 .clear-btn i:first-child {
     color: #ef4444;
 }
-
 .logout-btn i:first-child {
     color: #ef4444;
 }
 
-/* ----- Responsive ----- */
 @media (max-width: 600px) {
     .settings-card {
         padding: 18px 16px;
     }
-
     .data-btn {
         padding: 12px 14px;
         gap: 12px;
     }
-
     .data-btn i:first-child {
         font-size: 1.1rem;
         width: 28px;
     }
-
     .settings-container {
         padding: 0;
     }
 }
 
-/* ----- Dark Mode Adjustments ----- */
 body.dark .settings-card {
     background: var(--bg-card);
 }
-
 body.dark .data-btn {
     background: var(--bg-input);
 }
-
 body.dark .data-btn:hover {
     background: var(--hover-bg);
 }
-
 body.dark .toggle-slider {
     background: var(--border-color);
 }
