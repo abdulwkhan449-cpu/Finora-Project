@@ -1,28 +1,21 @@
 // ============================================================
 // 0. USER PROFILE & GLOBAL STATE
 // ============================================================
-let userProfile = { name: 'Guest', currency: 'USD', symbol: '$' };
+let userProfile = { name: 'Guest', currency: 'PKR', symbol: 'Rs' };
 let monthlyChart = null;
 let categoryChart = null;
 
-const CURRENCY_SYMBOLS = {
-    PKR: 'Rs',
-    USD: '$',
-    EUR: '€',
-    GBP: '£',
-    INR: '₹',
-    JPY: '¥'
-};
+const CURRENCY_SYMBOLS = { PKR: 'Rs', USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥' };
 
 // ============================================================
-// 1. LOAD USER PROFILE & THEME
+// 1. LOAD USER PROFILE (same as index.js)
 // ============================================================
 function loadUserProfile() {
     const stored = localStorage.getItem('userProfile');
     if (stored) {
         userProfile = JSON.parse(stored);
         if (!userProfile.symbol || !CURRENCY_SYMBOLS[userProfile.currency]) {
-            userProfile.symbol = CURRENCY_SYMBOLS[userProfile.currency] || '$';
+            userProfile.symbol = CURRENCY_SYMBOLS[userProfile.currency] || 'Rs';
         }
         return true;
     }
@@ -37,12 +30,12 @@ function updateUIWithUser() {
 }
 
 function formatCurrency(amount) {
-    const symbol = userProfile.symbol || '$';
+    const symbol = userProfile.symbol || 'Rs';
     return symbol + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 // ============================================================
-// 2. SIDEBAR LOGIC (IDENTICAL to index.js)
+// 2. SIDEBAR LOGIC (identical to index.js)
 // ============================================================
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('sidebarOverlay');
@@ -53,7 +46,6 @@ function toggleSidebar(forceState) {
     const isOpen = forceState !== undefined ? forceState : !sidebar.classList.contains('open');
     sidebar.classList.toggle('open', isOpen);
 
-    // Only show overlay on mobile (under 900px)
     if (window.innerWidth < 901) {
         overlay.classList.toggle('active', isOpen);
     } else {
@@ -96,13 +88,12 @@ window.addEventListener('resize', () => {
 });
 
 // ============================================================
-// 3. SETTINGS MODAL (IDENTICAL to index.js)
+// 3. SETTINGS MODAL (same as index.js)
 // ============================================================
 const settingsModal = document.getElementById('settingsModal');
 const settingsNavTrigger = document.getElementById('settingsNavTrigger');
 const closeSettingsBtn = document.getElementById('closeSettingsBtn');
 const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-const logoutBtn = document.getElementById('logoutBtn');
 const settingsName = document.getElementById('settingsName');
 const settingsCurrency = document.getElementById('settingsCurrency');
 
@@ -114,7 +105,11 @@ function openSettings() {
 function closeSettings() {
     settingsModal.classList.remove('active');
 }
-settingsNavTrigger.addEventListener('click', openSettings);
+
+if (settingsNavTrigger) {
+    settingsNavTrigger.addEventListener('click', openSettings);
+}
+
 closeSettingsBtn.addEventListener('click', closeSettings);
 settingsModal.addEventListener('click', (e) => {
     if (e.target === settingsModal) closeSettings();
@@ -127,20 +122,12 @@ saveSettingsBtn.addEventListener('click', () => {
     
     userProfile.name = name;
     userProfile.currency = currency;
-    userProfile.symbol = CURRENCY_SYMBOLS[currency] || '$';
+    userProfile.symbol = CURRENCY_SYMBOLS[currency] || 'Rs';
     localStorage.setItem('userProfile', JSON.stringify(userProfile));
     updateUIWithUser();
     renderAll();
     closeSettings();
     showToast('✅ Settings updated successfully!', 'success');
-});
-
-logoutBtn.addEventListener('click', () => {
-    closeSettings();
-    if (confirm('Are you sure you want to logout?')) {
-        localStorage.removeItem('userProfile');
-        window.location.href = 'index.html';
-    }
 });
 
 // ============================================================
@@ -173,9 +160,9 @@ function toggleDarkMode() {
 }
 
 // ============================================================
-// 6. LOAD DATA & RENDER
+// 6. LOAD TRANSACTIONS (SHARED WITH DASHBOARD)
 // ============================================================
-function loadFromLocalStorage() {
+function loadTransactions() {
     const stored = localStorage.getItem('financeData');
     if (stored) {
         return JSON.parse(stored);
@@ -183,6 +170,9 @@ function loadFromLocalStorage() {
     return [];
 }
 
+// ============================================================
+// 7. YEAR FILTER LOGIC
+// ============================================================
 function getAvailableYears(transactions) {
     const years = new Set();
     transactions.forEach(tx => {
@@ -203,11 +193,14 @@ function populateYearFilter(years) {
         years = [currentYear];
     }
     
+    // Show most recent year first
+    years.sort((a, b) => b - a);
+    
     years.forEach(year => {
         const option = document.createElement('option');
         option.value = year;
         option.textContent = year;
-        if (year === currentYear || year === years[years.length - 1]) {
+        if (year === currentYear) {
             option.selected = true;
         }
         select.appendChild(option);
@@ -218,8 +211,11 @@ function getTransactionsForYear(transactions, year) {
     return transactions.filter(tx => tx.date && tx.date.startsWith(year));
 }
 
+// ============================================================
+// 8. RENDER ALL (Main function)
+// ============================================================
 function renderAll() {
-    const transactions = loadFromLocalStorage();
+    const transactions = loadTransactions(); // Same data as Dashboard
     const years = getAvailableYears(transactions);
     populateYearFilter(years);
     
@@ -244,7 +240,7 @@ function updateCountBadge(count) {
 }
 
 // ============================================================
-// 7. SUMMARY CARDS
+// 9. SUMMARY CARDS (shows real data from transactions)
 // ============================================================
 function updateSummaryCards(transactions) {
     let totalIncome = 0, totalExpense = 0;
@@ -269,7 +265,7 @@ function updateSummaryCards(transactions) {
 }
 
 // ============================================================
-// 8. MONTHLY CHART (Bar Chart)
+// 10. MONTHLY CHART (Bar Chart)
 // ============================================================
 function renderMonthlyChart(transactions) {
     const ctx = document.getElementById('monthlyChart').getContext('2d');
@@ -300,6 +296,7 @@ function renderMonthlyChart(transactions) {
         return;
     }
     
+    // Group by month
     const monthMap = {};
     transactions.forEach(tx => {
         const month = tx.date.substring(0, 7);
@@ -365,7 +362,7 @@ function renderMonthlyChart(transactions) {
 }
 
 // ============================================================
-// 9. CATEGORY CHART (Doughnut)
+// 11. CATEGORY CHART (Doughnut)
 // ============================================================
 function renderCategoryChart(transactions) {
     const ctx = document.getElementById('categoryChart').getContext('2d');
@@ -442,7 +439,7 @@ function renderCategoryChart(transactions) {
 }
 
 // ============================================================
-// 10. TOP SPENDING LIST
+// 12. TOP SPENDING LIST
 // ============================================================
 function renderTopSpending(transactions) {
     const container = document.getElementById('topSpendingList');
@@ -488,7 +485,25 @@ function renderTopSpending(transactions) {
 }
 
 // ============================================================
-// 11. INITIALIZATION
+// 13. AUTO-REFRESH WHEN DATA CHANGES (Integration with Dashboard)
+// ============================================================
+// Listen for storage changes from other tabs/pages
+window.addEventListener('storage', (e) => {
+    if (e.key === 'financeData' || e.key === 'userProfile' || e.key === 'darkMode') {
+        console.log('🔄 Data changed in another tab – refreshing Reports...');
+        renderAll();
+        updateUIWithUser();
+    }
+});
+
+// Also listen for custom events (in case of same-tab updates)
+document.addEventListener('transactionsUpdated', () => {
+    console.log('🔄 Transactions updated – refreshing Reports...');
+    renderAll();
+});
+
+// ============================================================
+// 14. INITIALIZATION
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
     const hasUser = loadUserProfile();
@@ -503,10 +518,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     darkToggle.addEventListener('click', toggleDarkMode);
     
+    // Initial render
     renderAll();
     
+    // Event listener for year filter change
     document.getElementById('yearFilter').addEventListener('change', renderAll);
     
+    // Restore sidebar state
     const savedSidebarState = localStorage.getItem('sidebarOpen');
     const isDesktop = window.innerWidth >= 901;
     let defaultOpen = isDesktop;
