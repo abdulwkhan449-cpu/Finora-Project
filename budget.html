@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Finora · Personal Finance</title>
+    <title>Finora · Budgets</title>
 
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,7 +19,11 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
+    <!-- Base CSS (Sidebar & Themes) -->
     <link rel="stylesheet" href="index.css" />
+
+    <!-- Budgets-specific styles -->
+    <link rel="stylesheet" href="budgets.css" />
 </head>
 <body>
 
@@ -27,75 +31,9 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <!-- ========================================================== -->
-    <!-- LOGIN / PROFILE SETUP PAGE                                 -->
-    <!-- ========================================================== -->
-    <div id="loginPage" class="login-page">
-        <div class="login-card">
-            <div class="login-logo">
-                <i class="fas fa-chart-pie"></i> Finora
-            </div>
-            <p class="login-sub">Welcome! Set up your profile to start tracking.</p>
-            
-            <div class="login-form">
-                <div class="form-group">
-                    <label for="loginName">Your Full Name</label>
-                    <input type="text" id="loginName" placeholder="e.g., Alex Rivera" value="Abdul Wali" />
-                </div>
-                <div class="form-group">
-                    <label for="loginCurrency">Preferred Currency</label>
-                    <select id="loginCurrency">
-                        <option value="PKR" selected>🇵🇰 PKR (Rs)</option>
-                        <option value="USD">🇺🇸 USD ($)</option>
-                        <option value="EUR">🇪🇺 EUR (€)</option>
-                        <option value="GBP">🇬🇧 GBP (£)</option>
-                        <option value="INR">🇮🇳 INR (₹)</option>
-                        <option value="JPY">🇯🇵 JPY (¥)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="loginBalance">Starting Balance (Optional)</label>
-                    <input type="number" id="loginBalance" placeholder="e.g., 5000" step="0.01" min="0" value="5000" />
-                    <small class="text-gray-500 dark:text-gray-400 block mt-1">This will be added as your initial income.</small>
-                </div>
-                <button class="btn btn-primary w-full mt-3" id="loginBtn">
-                    <i class="fas fa-rocket"></i> Start Tracking
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================================== -->
-    <!-- SETTINGS MODAL                                             -->
-    <!-- ========================================================== -->
-    <div id="settingsModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="text-2xl font-bold mb-4"><i class="fas fa-cog"></i> Settings</h2>
-            <div class="form-group">
-                <label for="settingsName">Name</label>
-                <input type="text" id="settingsName" placeholder="Your Name" />
-            </div>
-            <div class="form-group">
-                <label for="settingsCurrency">Currency</label>
-                <select id="settingsCurrency">
-                    <option value="PKR" selected>🇵🇰 PKR (Rs)</option>
-                    <option value="USD">🇺🇸 USD ($)</option>
-                    <option value="EUR">🇪🇺 EUR (€)</option>
-                    <option value="GBP">🇬🇧 GBP (£)</option>
-                    <option value="INR">🇮🇳 INR (₹)</option>
-                    <option value="JPY">🇯🇵 JPY (¥)</option>
-                </select>
-            </div>
-            <div class="flex flex-wrap gap-3 mt-4">
-                <button class="btn btn-primary flex-1" id="saveSettingsBtn"><i class="fas fa-save"></i> Save Changes</button>
-                <button class="btn flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300" id="closeSettingsBtn">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================================== -->
     <!-- MAIN APP                                                   -->
     <!-- ========================================================== -->
-    <div id="appContainer" class="app-container" style="display: none;">
+    <div class="app-container">
 
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
@@ -104,10 +42,10 @@
                 <span>Finora</span>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="nav-item active"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
                 <a href="reports.html" class="nav-item"><i class="fas fa-chart-line"></i> Reports</a>
-                <a href="budgets.html" class="nav-item"><i class="fas fa-wallet"></i> Budgets</a>
-                <a href="settings.html" class="nav-item" id="settingsNavTrigger"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" class="nav-item active"><i class="fas fa-wallet"></i> Budgets</a>
+                <a href="#" class="nav-item" id="settingsNavTrigger"><i class="fas fa-cog"></i> Settings</a>
             </nav>
             <div class="sidebar-user">
                 <div class="avatar" id="userAvatar">JD</div>
@@ -126,108 +64,57 @@
                 <div class="flex items-center gap-4">
                     <button class="hamburger" id="menuToggle"><i class="fas fa-bars"></i></button>
                     <div>
-                        <h1 class="text-3xl font-bold">Dashboard</h1>
-                        <p id="currentMonthDisplay" class="subtitle">July 2026 Overview</p>
+                        <h1 class="text-3xl font-bold">Budgets</h1>
+                        <p id="currentMonthDisplay" class="subtitle">Manage your monthly spending limits</p>
                     </div>
                 </div>
                 <div class="header-actions">
-                    <span id="headerCurrencyDisplay" class="font-semibold text-gray-500 dark:text-gray-400">PKR</span>
+                    <span id="headerCurrencyDisplay" class="font-semibold text-gray-500 dark:text-gray-400">USD</span>
                     <button class="dark-toggle" id="darkModeToggle"><i class="fas fa-moon"></i> Dark</button>
-                    <button class="btn btn-primary px-5 py-2" id="addQuickBtn"><i class="fas fa-plus"></i> New</button>
+                    <button class="btn btn-primary px-5 py-2" id="addBudgetBtn">
+                        <i class="fas fa-plus"></i> New Budget
+                    </button>
                 </div>
             </header>
 
-            <!-- Summary Cards -->
-            <section class="summary-grid">
+            <!-- Quick Stats -->
+            <div class="summary-grid" id="budgetSummary">
                 <div class="card card-balance">
-                    <div class="card-header"><i class="fas fa-wallet"></i> Total Balance</div>
-                    <div class="card-value" id="balanceDisplay">Rs0.00</div>
-                    <div class="card-footer" id="balanceChange">+ Rs0.00 this month</div>
+                    <div class="card-header"><i class="fas fa-wallet"></i> Total Budget</div>
+                    <div class="card-value" id="totalBudgetDisplay">$0.00</div>
+                    <div class="card-footer">Across all categories</div>
                 </div>
                 <div class="card card-income">
-                    <div class="card-header"><i class="fas fa-arrow-up"></i> Income</div>
-                    <div class="card-value" id="incomeDisplay">Rs0.00</div>
-                    <div class="card-footer">Total earned</div>
-                </div>
-                <div class="card card-expense">
-                    <div class="card-header"><i class="fas fa-arrow-down"></i> Expenses</div>
-                    <div class="card-value" id="expenseDisplay">Rs0.00</div>
-                    <div class="card-footer">Total spent</div>
+                    <div class="card-header"><i class="fas fa-arrow-up"></i> Total Spent</div>
+                    <div class="card-value" id="totalSpentDisplay">$0.00</div>
+                    <div class="card-footer">Against budgets</div>
                 </div>
                 <div class="card card-savings">
-                    <div class="card-header"><i class="fas fa-piggy-bank"></i> Savings Rate</div>
-                    <div class="card-value" id="savingsDisplay">0%</div>
-                    <div class="card-footer">of total income</div>
+                    <div class="card-header"><i class="fas fa-percentage"></i> Overall Usage</div>
+                    <div class="card-value" id="overallUsageDisplay">0%</div>
+                    <div class="card-footer">of total budget used</div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Filter -->
+            <!-- Filter: Month -->
             <div class="filter-bar">
                 <div class="filter-left">
-                    <label for="monthFilter"><i class="fas fa-calendar-alt"></i> Month:</label>
-                    <input type="month" id="monthFilter" />
+                    <label for="budgetMonthFilter"><i class="fas fa-calendar-alt"></i> Month:</label>
+                    <input type="month" id="budgetMonthFilter" />
                 </div>
                 <div class="filter-right">
-                    <span class="stat-badge" id="txCountBadge"><i class="fas fa-list"></i> 0 Transactions</span>
-                    <span class="stat-badge" id="topCategoryBadge"><i class="fas fa-tag"></i> Top: None</span>
+                    <span class="stat-badge" id="budgetCountBadge"><i class="fas fa-list"></i> 0 Budgets</span>
+                    <span class="stat-badge" id="overBudgetBadge"><i class="fas fa-exclamation-triangle"></i> 0 Over Budget</span>
                 </div>
             </div>
 
-            <!-- Row -->
-            <div class="row">
-                <div class="form-box">
-                    <h2 id="formTitle" class="text-xl font-semibold mb-4"><i class="fas fa-plus-circle text-purple-600"></i> Add Transaction</h2>
-                    <form id="transactionForm">
-                        <div class="form-group">
-                            <label for="description"><i class="fas fa-pen"></i> Description</label>
-                            <input type="text" id="description" placeholder="e.g., Uber ride to airport" required />
-                        </div>
-                        <div class="form-group">
-                            <label for="amount"><i class="fas fa-rupee-sign"></i> Amount</label>
-                            <input type="number" id="amount" placeholder="0.00" step="0.01" min="0.01" required />
-                        </div>
-                        <div class="form-group">
-                            <label for="category"><i class="fas fa-tags"></i> Category</label>
-                            <select id="category">
-                                <option value="Food & Dining">Food & Dining</option>
-                                <option value="Transport">Transport</option>
-                                <option value="Shopping">Shopping</option>
-                                <option value="Bills & Utilities">Bills & Utilities</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Salary">Salary</option>
-                                <option value="Rent">Rent</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Type</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="type" value="income" checked /> <i class="fas fa-arrow-up text-green-500"></i> Income</label>
-                                <label><input type="radio" name="type" value="expense" /> <i class="fas fa-arrow-down text-red-500"></i> Expense</label>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="submitBtn">
-                            <i class="fas fa-plus"></i> Add Transaction
-                        </button>
-                    </form>
-                </div>
-
-                <div class="chart-box">
-                    <h2 class="text-xl font-semibold mb-2"><i class="fas fa-chart-pie text-purple-600"></i> Spending Breakdown</h2>
-                    <div class="chart-wrapper">
-                        <canvas id="expenseChart"></canvas>
-                    </div>
-                    <p id="chartEmptyMsg" class="chart-empty-msg">No expenses logged for this month.</p>
-                </div>
-            </div>
-
-            <!-- List -->
+            <!-- Budgets List -->
             <div class="list-box">
                 <div class="list-header">
-                    <h2 class="text-xl font-semibold"><i class="fas fa-receipt text-purple-600"></i> Recent Transactions</h2>
-                    <span id="listMonthLabel" class="text-sm text-gray-500 dark:text-gray-400">Showing July 2026</span>
+                    <h2 class="text-xl font-semibold"><i class="fas fa-wallet text-purple-600"></i> Your Budgets</h2>
+                    <span id="listMonthLabel" class="text-sm text-gray-500 dark:text-gray-400">For July 2026</span>
                 </div>
-                <div id="transactionList">
+                <div id="budgetList">
                     <!-- Rendered by JS -->
                 </div>
             </div>
@@ -235,6 +122,65 @@
         </main>
     </div>
 
-    <script src="index.js"></script>
+    <!-- ========================================================== -->
+    <!-- ADD / EDIT BUDGET MODAL                                    -->
+    <!-- ========================================================== -->
+    <div id="budgetModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="budgetModalTitle" class="text-2xl font-bold mb-4"><i class="fas fa-plus-circle text-purple-600"></i> Set Budget</h2>
+            <div class="form-group">
+                <label for="budgetCategory">Category</label>
+                <select id="budgetCategory">
+                    <option value="Food & Dining">Food & Dining</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Bills & Utilities">Bills & Utilities</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Rent">Rent</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="budgetAmount">Monthly Limit</label>
+                <input type="number" id="budgetAmount" placeholder="0.00" step="0.01" min="0.01" required />
+                <small class="text-gray-500 dark:text-gray-400 block mt-1">Set your spending limit for this category per month.</small>
+            </div>
+            <div class="flex flex-wrap gap-3 mt-4">
+                <button class="btn btn-primary flex-1" id="saveBudgetBtn"><i class="fas fa-save"></i> Save Budget</button>
+                <button class="btn flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300" id="closeBudgetBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- SETTINGS MODAL                                             -->
+    <!-- ========================================================== -->
+    <div id="settingsModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4"><i class="fas fa-cog"></i> Settings</h2>
+            <div class="form-group">
+                <label for="settingsName">Name</label>
+                <input type="text" id="settingsName" placeholder="Your Name" />
+            </div>
+            <div class="form-group">
+                <label for="settingsCurrency">Currency</label>
+                <select id="settingsCurrency">
+                    <option value="PKR">🇵🇰 PKR (Rs)</option>
+                    <option value="USD">🇺🇸 USD ($)</option>
+                    <option value="EUR">🇪🇺 EUR (€)</option>
+                    <option value="GBP">🇬🇧 GBP (£)</option>
+                    <option value="INR">🇮🇳 INR (₹)</option>
+                    <option value="JPY">🇯🇵 JPY (¥)</option>
+                </select>
+            </div>
+            <div class="flex flex-wrap gap-3 mt-4">
+                <button class="btn btn-primary flex-1" id="saveSettingsBtn"><i class="fas fa-save"></i> Save Changes</button>
+                <button class="btn flex-1 bg-red-500 hover:bg-red-600 text-white" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                <button class="btn flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300" id="closeSettingsBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="budgets.js"></script>
 </body>
 </html>
