@@ -5,7 +5,7 @@ let userProfile = { name: 'Guest', currency: 'PKR', symbol: 'Rs' };
 const CURRENCY_SYMBOLS = { PKR: 'Rs', USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥' };
 
 // ============================================================
-// 1. LOAD USER PROFILE (same as index.js)
+// 1. LOAD USER PROFILE
 // ============================================================
 function loadUserProfile() {
     const stored = localStorage.getItem('userProfile');
@@ -25,7 +25,6 @@ function updateUIWithUser() {
     document.getElementById('userAvatar').textContent = initials;
     document.getElementById('headerCurrencyDisplay').textContent = userProfile.currency;
 
-    // Update profile form
     document.getElementById('settingsProfileName').value = userProfile.name;
     document.getElementById('settingsProfileCurrency').value = userProfile.currency;
 }
@@ -36,7 +35,7 @@ function formatCurrency(amount) {
 }
 
 // ============================================================
-// 2. SIDEBAR LOGIC (identical to index.js)
+// 2. SIDEBAR LOGIC
 // ============================================================
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('sidebarOverlay');
@@ -89,7 +88,7 @@ window.addEventListener('resize', () => {
 });
 
 // ============================================================
-// 3. DARK MODE (syncs with all pages)
+// 3. DARK MODE
 // ============================================================
 const darkToggle = document.getElementById('darkModeToggle');
 const darkModeSwitch = document.getElementById('darkModeSwitch');
@@ -102,7 +101,6 @@ function toggleDarkMode() {
         darkModeSwitch.checked = isDark;
     }
     localStorage.setItem('darkMode', isDark);
-    // Dispatch event so other pages can sync (if open)
     window.dispatchEvent(new Event('storage'));
 }
 
@@ -141,7 +139,7 @@ function showToast(message, type = 'info') {
 }
 
 // ============================================================
-// 5. SAVE PROFILE (updates localStorage and syncs all pages)
+// 5. SAVE PROFILE
 // ============================================================
 document.getElementById('saveProfileBtn').addEventListener('click', () => {
     const name = document.getElementById('settingsProfileName').value.trim();
@@ -158,15 +156,13 @@ document.getElementById('saveProfileBtn').addEventListener('click', () => {
     localStorage.setItem('userProfile', JSON.stringify(userProfile));
 
     updateUIWithUser();
-
-    // Dispatch event so other pages can sync (if open)
     window.dispatchEvent(new Event('storage'));
 
     showToast('✅ Profile updated successfully!', 'success');
 });
 
 // ============================================================
-// 6. EXPORT DATA (CSV)
+// 6. EXPORT DATA
 // ============================================================
 document.getElementById('exportDataBtn').addEventListener('click', () => {
     const stored = localStorage.getItem('financeData');
@@ -205,7 +201,7 @@ document.getElementById('exportDataBtn').addEventListener('click', () => {
 });
 
 // ============================================================
-// 7. IMPORT DATA (CSV)
+// 7. IMPORT DATA
 // ============================================================
 document.getElementById('importDataBtn').addEventListener('click', () => {
     document.getElementById('fileInput').click();
@@ -269,8 +265,6 @@ document.getElementById('fileInput').addEventListener('change', (e) => {
             localStorage.setItem('financeData', JSON.stringify(merged));
 
             document.getElementById('fileInput').value = '';
-
-            // Dispatch event so other pages can sync
             window.dispatchEvent(new Event('storage'));
 
             showToast(`✅ Imported ${transactions.length} transactions successfully!`, 'success');
@@ -297,10 +291,7 @@ document.getElementById('clearDataBtn').addEventListener('click', () => {
     }
 
     localStorage.removeItem('financeData');
-
-    // Dispatch event so other pages can sync
     window.dispatchEvent(new Event('storage'));
-
     showToast('🗑️ All data has been cleared.', 'info');
 });
 
@@ -315,13 +306,77 @@ document.getElementById('settingsLogoutBtn').addEventListener('click', () => {
 });
 
 // ============================================================
-// 10. LISTEN FOR STORAGE CHANGES (from other pages)
+// 10. QUICK ADD MONEY (NEW)
+// ============================================================
+const quickForm = document.getElementById('quickAddForm');
+const quickDescription = document.getElementById('quickDescription');
+const quickAmount = document.getElementById('quickAmount');
+const quickCategory = document.getElementById('quickCategory');
+const quickTypeRadios = document.querySelectorAll('input[name="quickType"]');
+const quickAddSuccess = document.getElementById('quickAddSuccess');
+
+quickForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const description = quickDescription.value.trim();
+    const amount = parseFloat(quickAmount.value);
+    const category = quickCategory.value;
+    let type = 'income';
+    quickTypeRadios.forEach(r => { if (r.checked) type = r.value; });
+
+    if (!description) {
+        showToast('Please enter a description.', 'error');
+        return;
+    }
+    if (isNaN(amount) || amount <= 0) {
+        showToast('Please enter a valid positive amount.', 'error');
+        return;
+    }
+
+    // Get today's date
+    const today = new Date().toISOString().slice(0, 10);
+
+    // Load existing transactions
+    const stored = localStorage.getItem('financeData');
+    let transactions = stored ? JSON.parse(stored) : [];
+
+    // Create new transaction
+    const newTx = {
+        id: Date.now(),
+        description: description,
+        amount: amount,
+        category: category,
+        type: type,
+        date: today
+    };
+
+    transactions.push(newTx);
+    localStorage.setItem('financeData', JSON.stringify(transactions));
+
+    // Reset form
+    quickForm.reset();
+    document.querySelector('input[name="quickType"][value="income"]').checked = true;
+
+    // Show success message
+    quickAddSuccess.style.display = 'block';
+    setTimeout(() => {
+        quickAddSuccess.style.display = 'none';
+    }, 3000);
+
+    // Dispatch event for other pages
+    document.dispatchEvent(new Event('transactionsUpdated'));
+    window.dispatchEvent(new Event('storage'));
+
+    showToast(`✅ ${type === 'income' ? 'Income' : 'Expense'} of ${formatCurrency(amount)} added!`, 'success');
+});
+
+// ============================================================
+// 11. LISTEN FOR STORAGE CHANGES
 // ============================================================
 window.addEventListener('storage', (e) => {
     if (e.key === 'userProfile') {
         loadUserProfile();
         updateUIWithUser();
-        // Update dark mode if changed from elsewhere
         if (localStorage.getItem('darkMode') === 'true') {
             document.body.classList.add('dark');
             darkToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
@@ -346,13 +401,8 @@ window.addEventListener('storage', (e) => {
     }
 });
 
-// Also listen for custom events within same tab
-document.addEventListener('storage', () => {
-    // Re-run if needed
-});
-
 // ============================================================
-// 11. INITIALIZATION
+// 12. INITIALIZATION
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
     const hasUser = loadUserProfile();
@@ -361,7 +411,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Load dark mode
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark');
         darkToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
@@ -370,7 +419,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateUIWithUser();
 
-    // Restore sidebar state
     const savedSidebarState = localStorage.getItem('sidebarOpen');
     const isDesktop = window.innerWidth >= 901;
     let defaultOpen = isDesktop;
