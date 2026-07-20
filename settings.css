@@ -67,6 +67,7 @@
     box-shadow: var(--shadow-hover);
 }
 
+/* ----- Form inside settings card ----- */
 .settings-card .form-group {
     margin-bottom: 16px;
 }
@@ -99,6 +100,34 @@
 .settings-card .form-group select:focus {
     outline: 2px solid var(--accent-purple);
     border-color: transparent;
+}
+
+.settings-card .form-group input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.6;
+}
+
+/* ----- Radio Group in Quick Add ----- */
+.settings-card .radio-group {
+    display: flex;
+    gap: 25px;
+    margin-top: 5px;
+    flex-wrap: wrap;
+}
+
+.settings-card .radio-group label {
+    font-weight: 400;
+    cursor: pointer;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.settings-card .radio-group input[type="radio"] {
+    width: auto;
+    margin-right: 4px;
+    accent-color: var(--accent-purple);
 }
 
 /* ----- Appearance Toggle ----- */
@@ -210,34 +239,150 @@
     color: #ef4444;
 }
 
+/* ----- Quick Add Success Message ----- */
+#quickAddSuccess {
+    animation: fadeInUp 0.5s ease;
+    display: none;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* ----- Responsive ----- */
 @media (max-width: 600px) {
     .settings-card {
         padding: 18px 16px;
     }
+
     .data-btn {
         padding: 12px 14px;
         gap: 12px;
     }
+
     .data-btn i:first-child {
         font-size: 1.1rem;
         width: 28px;
     }
+
     .settings-container {
         padding: 0;
     }
+
+    .settings-card .radio-group {
+        gap: 15px;
+    }
 }
 
-/* ----- Dark mode ----- */
+/* ----- Dark Mode Overrides ----- */
 body.dark .settings-card {
     background: var(--bg-card);
 }
+
 body.dark .data-btn {
     background: var(--bg-input);
 }
+
 body.dark .data-btn:hover {
     background: var(--hover-bg);
 }
+
 body.dark .toggle-slider {
     background: var(--border-color);
+}
+
+body.dark .settings-card .form-group input,
+body.dark .settings-card .form-group select {
+    background: var(--bg-input);
+    color: var(--text-primary);
+}
+
+body.dark .settings-card .form-group input:focus,
+body.dark .settings-card .form-group select:focus {
+    outline: 2px solid var(--accent-purple);
+}
+
+body.dark #quickAddSuccess {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+/* ----- Button Styles (reused from index.css, but here for completeness) ----- */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+.btn-primary {
+    background: var(--accent-purple);
+    color: white;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background: #6d28d9;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+}
+
+/* ----- Toast notification (in case it's needed in settings) ----- */
+.toast-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 99999;
+}
+
+.toast {
+    padding: 14px 22px;
+    border-radius: 12px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-left: 5px solid var(--accent-purple);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    font-weight: 500;
+    font-size: 0.9rem;
+    min-width: 220px;
+    animation: slideIn 0.4s ease;
+    border: 1px solid var(--border-color);
+}
+
+.toast.success {
+    border-left-color: var(--accent-green);
+}
+.toast.error {
+    border-left-color: var(--accent-red);
+}
+.toast.info {
+    border-left-color: var(--accent-purple);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
