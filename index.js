@@ -70,6 +70,9 @@ function showLoginPage(show) {
     if (show) {
         loginPage.classList.remove('hidden');
         appContainer.style.display = 'none';
+        // Clear any pre-filled values from inputs
+        document.getElementById('loginName').value = '';
+        document.getElementById('loginBalance').value = '';
     } else {
         loginPage.classList.add('hidden');
         appContainer.style.display = 'flex';
@@ -186,12 +189,23 @@ logoutBtn.addEventListener('click', () => {
 });
 
 // ============================================================
-// 3. LOGIN HANDLER
+// 3. LOGIN HANDLER (UPDATED - No pre-filled values)
 // ============================================================
-document.getElementById('loginBtn').addEventListener('click', () => {
-    const name = document.getElementById('loginName').value.trim();
-    const currency = document.getElementById('loginCurrency').value;
-    const balance = parseFloat(document.getElementById('loginBalance').value) || 0;
+// Get login button and inputs
+const loginBtn = document.getElementById('loginBtn');
+const loginName = document.getElementById('loginName');
+const loginBalance = document.getElementById('loginBalance');
+const loginCurrency = document.getElementById('loginCurrency');
+
+// Clear any values that might have been set
+loginName.value = '';
+loginBalance.value = '';
+
+loginBtn.addEventListener('click', () => {
+    const name = loginName.value.trim();
+    const currency = loginCurrency.value;
+    const balance = parseFloat(loginBalance.value) || 0;
+    
     if (!name) {
         showToast('Please enter your name.', 'error');
         return;
@@ -199,8 +213,14 @@ document.getElementById('loginBtn').addEventListener('click', () => {
     saveUserProfile(name, currency, balance);
 });
 
-document.getElementById('loginBalance').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') document.getElementById('loginBtn').click();
+// Allow Enter key on balance field
+loginBalance.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') loginBtn.click();
+});
+
+// Also allow Enter key on name field
+loginName.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') loginBtn.click();
 });
 
 // ============================================================
